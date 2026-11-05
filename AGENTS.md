@@ -1,18 +1,6 @@
-# AGENTS.md Template
+# 201–207 Elk Ave S Medical & Executive Leasing Website (`201-elk-ave-website`)
 
-Replace bracketed placeholders and remove sections that do not apply. Keep this
-file focused on durable repository guidance; put temporary plans and
-task-specific instructions elsewhere.
-
-When tailoring this file for a project, preserve its section structure and
-general rules, and add project-specific detail beneath them rather than
-replacing them. Where a project rule is stricter than a shared skill, standard,
-or inherited convention, the project rule wins — state that explicitly.
-
-# [Project Name]
-
-[Describe what the project does, who or what it serves, and the primary
-technology or deployment model in two or three sentences.]
+This project builds and serves a local-first, static-compatible marketing and due-diligence web application for **207 Elk Ave S (201–207 Elk Ave S Medical Campus)** in historic downtown Fayetteville, TN. It serves prospective medical, dental, specialty outpatient, behavioral health, rehabilitation, and healthcare education tenants evaluating single-floor, phased, or full-building lease structures with ownership (**207 Elk LLC**). The primary technology stack is a zero-dependency Python 3.9+ static site builder and local HTTP server (`src/elk_ave/`) paired with semantic HTML5, modern CSS3 custom properties, and progressive vanilla JavaScript (`ES2022`).
 
 ---
 
@@ -20,9 +8,9 @@ technology or deployment model in two or three sentences.]
 
 This project exists to:
 
-- [Primary outcome]
-- [Secondary outcome]
-- [Important quality, reliability, or operational goal]
+- Present an Apple/Google-caliber interactive property showcase and clinical due-diligence portal generalized for all prospective medical and healthcare tenants.
+- Quantify speed-to-market and Tenant Improvement (TI) capital preservation advantages (35+ plumbed clinical rooms, 7 procedure suites, X-ray/lab spaces, 12 ADA restrooms, central elevator, IBC Group B occupancy, and 0.5-acre dedicated parking lot).
+- Maintain a zero-external-dependency, deterministically testable local build and preview workflow with strict provenance tracking back to source ownership materials.
 
 ---
 
@@ -30,16 +18,16 @@ This project exists to:
 
 This repository owns:
 
-- [Application, service, library, or data product]
-- [Tests and fixtures]
-- [Deployment or infrastructure configuration]
-- [Project documentation]
+- Domain models, generalized property catalog, deterministic TI calculator, static HTML/JSON-LD renderer, and local preview HTTP server in `src/elk_ave/` and `main.py`
+- Extracted, web-optimized property photographs, renovation renderings, drone aerials, architectural floorplans, and boundary surveys in `src/elk_ave/static/assets/images/`
+- Automated unit and integration tests in `tests/`
+- Project documentation and completion reports in `README.md` and `docs/`
 
 This repository does **not** own:
 
-- [Upstream system or dependency]
-- [Downstream consumer]
-- [Related capability maintained elsewhere]
+- Raw upstream Canva design files or external graphic design authoring suites
+- External CRM, lead-capture cloud databases, or third-party analytics pipelines
+- Production DNS, CDN, or cloud hosting infrastructure (first draft is strictly local-only)
 
 Do not modify systems or resources outside this ownership boundary unless the
 user explicitly requests it. Permission to use a tool is not permission to
@@ -51,13 +39,13 @@ expand product scope.
 
 Current active work:
 
-- [Current milestone, product area, or phase]
-- [Approved plan, with its document path and the date the user approved it]
+- Local-first MVP & executive web application on branch `feature/prototype-local`
+- Approved scope: Initial generalized medical-tenant website built from `references/207 Elk Ave for TWU.pdf`, authorized by user on 2026-11-04 (`docs/completion-report.md`)
 
 Deferred or out of scope:
 
-- [Future capability]
-- [Known non-goal]
+- Cloud deployment, external form backend persistence, or third-party analytics tracking
+- Interactive CAD/BIM editing or online lease execution/payment processing
 
 Do not implement deferred work merely because a placeholder or extension point
 exists. Record approvals with enough specificity that a later agent can tell
@@ -68,29 +56,29 @@ what was authorized, by whom, and when.
 # High-Level Architecture
 
 ```text
-[Input or client]
+[Reference Briefing & Extracted Property Assets]
         |
-[Application or processing layer]
+[Domain Models & Generalized Catalog (src/elk_ave/models.py, catalog.py)]
         |
-[Persistence or integration layer]
+[Deterministic TI Estimator & Static Renderer (src/elk_ave/calculator.py, renderer.py)]
         |
-[Output or consumer]
+[Static Web Bundle (dist/) + Local HTTP Preview & JSON API (src/elk_ave/server.py, main.py)]
 ```
 
-[Briefly explain the major boundaries and the direction of dependencies.]
+Dependencies flow strictly downward: `models.py` defines immutable data contracts; `catalog.py` and `calculator.py` implement pure domain data and business logic with zero UI or HTTP coupling; `renderer.py` compiles the catalog and static assets into a self-contained web bundle; `server.py` and `main.py` provide thin CLI and local HTTP orchestration.
 
 ---
 
 # Repository Layout
 
 ```text
-repo/
-├── src/             # Production code
-├── tests/           # Automated tests
-├── docs/            # Project documentation and feature plans
-├── scripts/         # Development and operational scripts
-├── tmp/             # Disposable scratch files; Git-ignored
-└── [other]/         # [Purpose]
+201-elk-ave-website/
+├── main.py          # Thin CLI entrypoint (build, check, serve)
+├── src/             # Production Python package (src/elk_ave/) and static web assets
+├── tests/           # Automated unit and integration tests (unittest)
+├── docs/            # Project documentation and completion reports
+├── references/      # Local reference PDFs (Git-ignored via references/*.pdf)
+└── tmp/             # Disposable scratch files; Git-ignored
 ```
 
 Keep new files within the established layout. Add a new top-level directory
@@ -99,7 +87,9 @@ directory for disposable work only; never let it become an informal second
 source of truth.
 
 Reference material is not automatically authoritative. Confirm a file's role
-before treating it as a template, contract, or source of record.
+before treating it as a template, contract, or source of record. Note that raw
+Canva slides targeted at a single prospective tenant (`TWU`) must be generalized
+for broad medical-tenant applicability before inclusion in `src/elk_ave/catalog.py`.
 
 ---
 
@@ -158,7 +148,7 @@ exists:
 ## Error Handling
 
 - Fail loudly; never silently ignore an exception.
-- Raise meaningful, specific exception types.
+- Raise meaningful, specific exception types (`CalculatorValidationError`, `AssetVerificationError`).
 - Include enough context in error messages to diagnose the failure without
   reproducing it.
 - Report per-item failures and continue processing other items where the
@@ -171,10 +161,9 @@ first, then profile and optimize measured bottlenecks. Measure; do not guess.
 
 ## Language- or Framework-Specific Rules
 
-- [Naming convention]
-- [Formatting or linting convention]
-- [Framework pattern]
-- [Disallowed API or anti-pattern]
+- **Python (`>=3.9`)**: Use `from __future__ import annotations`, `@dataclass(frozen=True)` for domain objects, explicit type annotations, and `logging` instead of `print()`.
+- **HTML5 / CSS3 / JS**: Use semantic landmarks (`<header>`, `<main>`, `<section>`, `<article>`, `<footer>`), WCAG AA+ contrast, CSS custom properties (`:root` and `[data-theme="dark"]`), and zero external CDN runtime dependencies so the site runs 100% offline/locally.
+- **Disallowed anti-patterns**: Do not hardcode single-tenant pitch copy (`TWU`, `Tennessee Wesleyan`, `Wilhelm`) in rendered output; do not use `mv` or `rm` commands outside the repository root.
 
 ---
 
@@ -183,7 +172,7 @@ first, then profile and optimize measured bottlenecks. Measure; do not guess.
 - Reuse installed dependencies before introducing new packages.
 - Ask before adding a runtime dependency unless the user explicitly requested
   it.
-- Use the repository's existing package manager and lockfile.
+- Use the repository's existing package manager (`uv`) and `pyproject.toml`.
 - Before adding a dependency, ask: can the standard library solve this? Is it
   actively maintained? Does it simplify the architecture and reduce long-term
   complexity? If not, do not introduce it.
@@ -211,7 +200,7 @@ first, then profile and optimize measured bottlenecks. Measure; do not guess.
 - Apply least privilege to new integrations and deployment permissions; retain
   TLS verification.
 - Keep vendor inputs, generated findings, run artifacts, and machine-local paths
-  out of Git. Configure ignore rules before generating such artifacts.
+  out of Git. Configure ignore rules before generating such artifacts (`dist/`, `tmp/`, `references/*.pdf`).
 - Do not transmit source documents or private data to external services without
   explicit approval.
 
@@ -244,11 +233,17 @@ independent reconciliation of counts, sizes, or hashes against the source.
 Project validation commands:
 
 ```bash
-[format command]
-[lint command]
-[type-check command]
-[test command]
-[build or validation command]
+# Format command: NOT CONFIGURED (Ruff is not installed in the offline local environment)
+# Lint command: NOT CONFIGURED (Ruff is not installed in the offline local environment)
+# Type-check command: NOT CONFIGURED (Pyright is not installed in the offline local environment)
+# Bytecode & syntax check command (configured):
+uv run python3 -m compileall -q src tests main.py
+# Automated unit & integration test command (configured):
+uv run python3 -m unittest discover -s tests -v
+# Catalog & asset verification gate (configured):
+uv run python3 main.py check
+# Static build validation gate (configured):
+uv run python3 main.py build
 ```
 
 List every gate this repository actually has, and state explicitly which gates
@@ -260,9 +255,8 @@ as satisfied by a gate that does not exist.
 
 > **Organization convention (not a requirement of this template):** Python
 > projects here have standardized on `uv` with Ruff (format and lint), Pyright
-> (types), and pytest. Use that toolchain for a new Python repository unless
-> there is a reason not to. Other languages and stacks use their own; replace
-> the commands above accordingly.
+> (types), and pytest. In this offline local environment, `uv` is active with
+> Python's standard library `unittest` and `compileall` gates configured above.
 
 ---
 
@@ -281,7 +275,7 @@ as satisfied by a gate that does not exist.
   added or superseded. Preserve historical decisions while clearly labeling
   superseded behavior; the current contract remains authoritative.
 - For every major development effort, create or update a concise completion
-  report in the project's established location before declaring the work done.
+  report in `docs/completion-report.md` before declaring the work done.
   Include scope and key changes, commit references, validation commands and
   results, execution outcomes, limitations, and follow-up work. Reuse the
   effort's existing report rather than creating duplicates.
@@ -319,7 +313,7 @@ reproducing them locally. As applicable, record:
 
 - execution or request identifiers
 - runtime and status
-- meaningful counts or outcomes
+- meaningful counts or outcomes (`verified_assets`, `html_bytes`, `floors`, `archetypes`)
 - validation failures and warnings
 - deployment version or environment
 - inputs, versions, and outputs sufficient to reproduce a run
@@ -395,7 +389,7 @@ Commit-message rules:
 - Use lowercase types.
 - Choose the type that best describes the commit's primary intent.
 - Add a concise noun scope when it provides useful context, for example
-  `feat(auth): add password reset flow`. Scopes are optional; do not maintain a
+  `feat(web): add interactive medical leasing platform`. Scopes are optional; do not maintain a
   fixed scope list unless the repository benefits from one.
 - Write a specific, action-oriented description after the required colon and
   space.
@@ -492,11 +486,11 @@ A change is complete when all applicable conditions are met:
 
 - requested behavior is implemented
 - relevant tests pass
-- formatting, linting, type checks, and builds pass
+- formatting, linting, type checks, and builds pass (where configured; unconfigured gates explicitly reported)
 - errors and edge cases are handled
 - public interfaces are reviewed and unnecessary complexity is removed
 - directly related documentation is current
-- a concise completion report is current for major development efforts
+- a concise completion report is current for major development efforts (`docs/completion-report.md`)
 - no secrets, private data, or unintended files are included
 - the final diff contains no unrelated changes
 - deployment or runtime behavior is verified when required
@@ -506,9 +500,8 @@ A change is complete when all applicable conditions are met:
 
 # Project-Specific References
 
-- Product or requirements: `[path or URL]`
-- Architecture: `[path or URL]`
-- Development setup: `[path or URL]`
-- Deployment runbook: `[path or URL]`
-- Current roadmap: `[path or URL]`
-- Shared skills or knowledge bases this repository depends on: `[path or URL]`
+- Product & Property Briefing Source: `references/207 Elk Ave for TWU.pdf` (generalized in `src/elk_ave/catalog.py`)
+- Architecture & Usage Documentation: `README.md`
+- Completion Report: `docs/completion-report.md`
+- Domain & Rendering Implementation: `src/elk_ave/`
+- Automated Test Suite: `tests/test_elk_ave.py`

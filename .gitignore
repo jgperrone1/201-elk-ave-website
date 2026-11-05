@@ -1,5 +1,23 @@
-.DS_Store 
+# macOS & OS artifacts
+.DS_Store
+Thumbs.db
+
+# Environment & secrets
 .env
+.env.*
 
+# Python & uv virtual environments / bytecode
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
 
+# Generated static build & scratch directories
+dist/
+tmp/
 
+# Large raw reference exports (extracted web assets are tracked in src/elk_ave/static/assets/)
+references/*.pdf

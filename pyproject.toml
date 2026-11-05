@@ -1,7 +1,7 @@
 [project]
 name = "201-elk-ave-website"
 version = "0.1.0"
-description = "Add your description here"
+description = "Interactive medical & executive office leasing platform for 207 Elk Ave S (201-207 Elk Ave Campus), Fayetteville, TN"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = []
