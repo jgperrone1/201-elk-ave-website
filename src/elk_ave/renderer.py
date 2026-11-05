@@ -198,26 +198,26 @@ def render_index_html(listing: PropertyListing) -> str:
         <span class="brand-mark">207</span>
         <span class="brand-text">
           <span class="brand-name">207 Elk Ave S</span>
-          <span class="brand-location">Fayetteville, TN · Medical &amp; Executive Campus</span>
+          <span class="brand-location">Fayetteville, TN · Medical Campus</span>
         </span>
       </a>
 
-      <nav aria-label="Primary Navigation">
+      <nav class="header-nav" aria-label="Primary Navigation">
         <ul class="nav-links">
           <li><a href="#overview">Overview</a></li>
-          <li><a href="#specialties">Medical Fit</a></li>
-          <li><a href="#transformations">Renovation Vision</a></li>
+          <li><a href="#specialties">Specialties</a></li>
+          <li><a href="#transformations">Renovations</a></li>
           <li><a href="#floorplans">Floorplans</a></li>
-          <li><a href="#calculator">TI Estimator</a></li>
-          <li><a href="#advantages">21 Advantages</a></li>
-          <li><a href="#location">Parking &amp; Survey</a></li>
+          <li><a href="#calculator">TI Calculator</a></li>
+          <li><a href="#advantages">Advantages</a></li>
+          <li><a href="#location">Parking</a></li>
           <li><a href="#gallery">Gallery</a></li>
         </ul>
       </nav>
 
       <div class="header-actions">
         <button type="button" id="theme-toggle-btn" class="icon-btn" aria-label="Toggle color theme">🌙</button>
-        <a href="#contact" class="btn btn--primary btn--sm">Schedule Private Tour</a>
+        <a href="#contact" class="btn btn--primary btn--sm">Schedule Tour</a>
       </div>
     </div>
   </header>

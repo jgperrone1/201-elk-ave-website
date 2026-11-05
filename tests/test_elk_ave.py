@@ -218,6 +218,18 @@ class RendererAndServerTests(unittest.TestCase):
         # 5. Static paths return None so SimpleHTTPRequestHandler serves files
         self.assertIsNone(dispatch_api_request("/index.html"))
 
+    def test_top_header_and_button_alignment_contract(self) -> None:
+        listing = build_property_listing()
+        html_output = render_index_html(listing)
+        self.assertIn('<nav class="header-nav" aria-label="Primary Navigation">', html_output)
+        self.assertIn('>Schedule Tour</a>', html_output)
+
+        css_path = Path(__file__).resolve().parent.parent / "src" / "elk_ave" / "static" / "styles.css"
+        css_text = css_path.read_text(encoding="utf-8")
+        self.assertIn(".header-nav {", css_text)
+        self.assertIn("white-space: nowrap;", css_text)
+        self.assertIn("scrollbar-width: none;", css_text)
+
 
 if __name__ == "__main__":
     unittest.main()
