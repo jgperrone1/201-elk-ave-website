@@ -99,6 +99,8 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -106,7 +108,9 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
+  max-width: 100%;
   overflow-x: hidden;
+  position: relative;
   transition: background-color var(--transition-smooth), color var(--transition-smooth);
 }
 
@@ -157,6 +161,8 @@ textarea {
 .section {
   padding: clamp(4.5rem, 8vw, 7.5rem) 0;
   position: relative;
+  width: 100%;
+  max-width: 100%;
 }
 
 .section--alt {
@@ -220,6 +226,8 @@ textarea {
   position: sticky;
   top: 0;
   z-index: 1000;
+  width: 100%;
+  max-width: 100%;
   min-height: var(--header-height);
   background: var(--bg-glass);
   backdrop-filter: blur(20px) saturate(180%);
@@ -1631,6 +1639,8 @@ textarea {
 
 /* Footer */
 .site-footer {
+  width: 100%;
+  max-width: 100%;
   background: #0a1012;
   color: var(--text-on-dark-muted);
   padding: 3rem 0;
@@ -1674,11 +1684,183 @@ textarea {
   }
 
   .brand-location {
+    display: none;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .brand-location {
     display: block;
   }
 }
 
 @media (max-width: 640px) {
+  :root {
+    --header-height: 60px;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .site-header {
+    width: 100%;
+    max-width: 100vw;
+    min-height: 60px;
+  }
+
+  .header-inner {
+    width: 100%;
+    min-height: 60px;
+    gap: 0.5rem;
+  }
+
+  .brand {
+    gap: 0.45rem;
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+  }
+
+  .brand-text {
+    min-width: 0;
+  }
+
+  .brand-name {
+    font-size: 0.88rem;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-location {
+    display: none !important;
+  }
+
+  .header-actions {
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 0.9rem;
+  }
+
+  .btn--sm {
+    min-height: 34px;
+    padding: 0 0.75rem;
+    font-size: 0.78rem;
+  }
+
+  .hero {
+    padding: clamp(1.5rem, 4vw, 2.5rem) 0 clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .hero-cta-row {
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .hero-cta-row .btn {
+    width: 100%;
+  }
+
+  .badge {
+    white-space: normal;
+    text-align: left;
+    line-height: 1.3;
+    max-width: 100%;
+  }
+
+  .btn {
+    max-width: 100%;
+    word-break: break-word;
+  }
+
+  .inquiry-card {
+    padding: 1.35rem 1rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .inquiry-card .btn {
+    width: 100%;
+    justify-content: center;
+    white-space: normal;
+  }
+
+  .owner-card {
+    padding: 1.35rem 1rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .owner-avatar {
+    width: 68px;
+    height: 68px;
+  }
+
+  .owner-contact-link {
+    padding: 0.75rem 0.9rem;
+    font-size: 0.88rem;
+  }
+
+  .archetype-stage {
+    padding: 1.35rem 1rem;
+  }
+
+  .archetype-meta-box {
+    padding: 1.15rem;
+  }
+
+  .studio-details {
+    padding: 1.35rem 1rem;
+  }
+
+  .floorplan-card {
+    padding: 1.15rem 0.85rem;
+  }
+
+  .floorplan-toolbar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .calculator-shell {
+    padding: 1.35rem 1rem;
+  }
+
+  .calc-results-panel {
+    padding: 1.25rem 1rem;
+  }
+
+  .pillar-card {
+    padding: 1.35rem 1rem;
+  }
+
+  .site-footer {
+    padding: 2.25rem 0;
+  }
+
+  .site-footer .container > div:last-child {
+    text-align: left !important;
+  }
+
+  .lightbox {
+    padding: 0.5rem;
+  }
+
+  .lightbox-bar {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
   .bento-metrics,
   .hero-quick-facts,
   .floor-stats-strip,
@@ -1691,6 +1873,21 @@ textarea {
   .hero-view-switcher {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 360px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .brand-name {
+    font-size: 0.82rem;
+  }
+
+  .btn--sm {
+    padding: 0 0.55rem;
+    font-size: 0.74rem;
   }
 }
 

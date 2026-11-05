@@ -234,6 +234,11 @@ class RendererAndServerTests(unittest.TestCase):
         self.assertIn("white-space: nowrap;", css_text)
         self.assertIn("scrollbar-width: none;", css_text)
 
+        # Mobile header and overflow containment verification
+        self.assertIn("overflow-x: hidden;", css_text)
+        self.assertIn(".brand-location {\n    display: none !important;", css_text)
+        self.assertIn(".site-header {", css_text)
+
     def test_github_pages_root_entry_and_asset_prefix_resolution(self) -> None:
         listing = build_property_listing()
         root_html = render_index_html(listing, asset_prefix=ROOT_STATIC_PREFIX)

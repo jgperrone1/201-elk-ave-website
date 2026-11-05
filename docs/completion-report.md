@@ -22,6 +22,9 @@
   - Implemented `build`, `check`, and `serve` CLI subcommands plus `/api/health`, `/api/property`, and `/api/estimate` JSON endpoints using Python's standard library only.
 - **Repository Hygiene & Documentation (`.gitignore`, `README.md`, `AGENTS.md`, `pyproject.toml`)**:
   - Updated ignore rules, project metadata, usage documentation, and tailored `AGENTS.md` with project-specific architecture and validation gates.
+- **Mobile Responsive & Header Containment Optimization (`src/elk_ave/static/styles.css`)**:
+  - Resolved mobile horizontal overflow where the title bar previously forced layout width to ~484px on small viewports.
+  - Hid secondary location badge on screens <= 640px, scaled mobile header action buttons and badges, added `html`/`body` horizontal overflow containment, and converted inquiry call-to-actions to responsive full-width mobile controls.
 
 ---
 
