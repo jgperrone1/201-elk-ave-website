@@ -183,3 +183,4 @@ def calculate_clinical_fit(request: SpaceEstimateRequest) -> SpaceEstimateResult
         ibc_occupancy_note="Strict IBC Group B (Outpatient Medical / Clinical Training) — no Group E/I-1 retrofit triggers.",
         key_advantages=tuple(advantages),
     )
+

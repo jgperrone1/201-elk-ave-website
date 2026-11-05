@@ -97,3 +97,4 @@ Then visit `http://127.0.0.1:8000` in your browser. The server also exposes:
 ```bash
 uv run python3 -m unittest discover -s tests -v
 ```
+

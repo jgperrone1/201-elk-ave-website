@@ -174,3 +174,4 @@ class PropertyListing:
     def to_dict(self) -> dict[str, Any]:
         """Serialize the complete property listing to a JSON-compatible dictionary."""
         return asdict(self)
+
