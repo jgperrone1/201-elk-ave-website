@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import tempfile
 import threading
 import unittest
@@ -17,8 +18,11 @@ from src.elk_ave.calculator import (
 )
 from src.elk_ave.catalog import build_property_listing
 from src.elk_ave.renderer import (
+    REPO_ROOT_DIR,
+    ROOT_STATIC_PREFIX,
     AssetVerificationError,
     build_json_ld,
+    build_root_pages_entry,
     build_static_site,
     render_index_html,
     verify_static_assets,
@@ -229,6 +233,34 @@ class RendererAndServerTests(unittest.TestCase):
         self.assertIn(".header-nav {", css_text)
         self.assertIn("white-space: nowrap;", css_text)
         self.assertIn("scrollbar-width: none;", css_text)
+
+    def test_github_pages_root_entry_and_asset_prefix_resolution(self) -> None:
+        listing = build_property_listing()
+        root_html = render_index_html(listing, asset_prefix=ROOT_STATIC_PREFIX)
+        self.assertIn(f'data-asset-prefix="{ROOT_STATIC_PREFIX}"', root_html)
+        self.assertIn(f'href="{ROOT_STATIC_PREFIX}/styles.css"', root_html)
+        self.assertIn(f'src="{ROOT_STATIC_PREFIX}/app.js"', root_html)
+
+        # Verify every <link rel="stylesheet">, <script src="...">, and <img src="...">
+        # in the root GitHub Pages HTML resolves to an existing file on disk.
+        asset_refs = re.findall(
+            r'(?:<link[^>]+href="([^"]+)"|<script[^>]+src="([^"]+)"|<img[^>]+src="([^"]+)")',
+            root_html,
+        )
+        resolved_refs = [ next(val for val in group if val) for group in asset_refs ]
+        self.assertGreaterEqual(len(resolved_refs), 25)
+        for rel_ref in resolved_refs:
+            target_file = REPO_ROOT_DIR / rel_ref
+            self.assertTrue(
+                target_file.is_file() and target_file.stat().st_size > 0,
+                f"GitHub Pages root asset reference '{rel_ref}' does not exist at {target_file}",
+            )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+            idx_path = build_root_pages_entry(repo_root=tmp_root)
+            self.assertTrue(idx_path.is_file())
+            self.assertTrue((tmp_root / ".nojekyll").is_file())
 
 
 if __name__ == "__main__":

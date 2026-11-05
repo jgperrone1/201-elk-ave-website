@@ -29,9 +29,9 @@
 
 | Gate | Command | Status / Result |
 | :--- | :--- | :--- |
-| **Unit & Integration Tests** | `uv run python3 -m unittest discover -s tests -v` | **PASS** (13 tests in `0.06s`, 0 failures, 0 errors) |
+| **Unit & Integration Tests** | `uv run python3 -m unittest discover -s tests -v` | **PASS** (14 tests in `0.05s`, 0 failures, 0 errors) |
 | **Catalog & Asset Verification** | `uv run python3 main.py check` | **PASS** (`floors=2`, `archetypes=7`, `pillars=4`, `verified_assets=32`) |
-| **Static Site Build** | `uv run python3 main.py build` | **PASS** (`dist/index.html`, `dist/styles.css`, `dist/app.js`, `dist/property-data.json`, 40 copied images) |
+| **Static Site Build** | `uv run python3 main.py build` | **PASS** (`dist/index.html`, root `index.html` + `.nojekyll` for GitHub Pages, 40 verified images) |
 | **Bytecode & Syntax Check** | `uv run python3 -m compileall -q src tests main.py` | **PASS** (0 syntax/compilation errors) |
 | **Formatter / Linter (`ruff`)** | *Not configured* | Explicitly unconfigured in offline local environment |
 | **Type Checker (`pyright`)** | *Not configured* | Explicitly unconfigured in offline local environment |

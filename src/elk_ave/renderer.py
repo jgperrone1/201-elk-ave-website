@@ -12,6 +12,8 @@ from src.elk_ave.catalog import build_property_listing
 from src.elk_ave.models import PropertyListing
 
 STATIC_SOURCE_DIR = Path(__file__).resolve().parent / "static"
+REPO_ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+ROOT_STATIC_PREFIX = "src/elk_ave/static"
 
 
 class AssetVerificationError(FileNotFoundError):
@@ -21,6 +23,15 @@ class AssetVerificationError(FileNotFoundError):
 def _esc(val: Any) -> str:
     """HTML-escape any value safely."""
     return html.escape(str(val), quote=True)
+
+
+def _prefix_asset(rel_path: str, asset_prefix: str = "") -> str:
+    """Prefix a relative asset path when rendering for a non-dist root (e.g. GitHub Pages)."""
+    clean_prefix = asset_prefix.strip().strip("/")
+    clean_path = rel_path.strip().lstrip("/")
+    if not clean_prefix:
+        return clean_path
+    return f"{clean_prefix}/{clean_path}"
 
 
 def build_json_ld(listing: PropertyListing) -> dict[str, Any]:
@@ -55,10 +66,16 @@ def build_json_ld(listing: PropertyListing) -> dict[str, Any]:
     }
 
 
-def render_index_html(listing: PropertyListing) -> str:
+def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
     """Render the complete semantic HTML5 document for 207 Elk Ave S."""
     json_ld_str = json.dumps(build_json_ld(listing), indent=2)
     embedded_data_str = json.dumps(listing.to_dict())
+
+    def _asset(rel_path: str) -> str:
+        return _prefix_asset(rel_path, asset_prefix)
+
+    clean_prefix = asset_prefix.strip().strip("/")
+    html_prefix_attr = f' data-asset-prefix="{_esc(clean_prefix)}"' if clean_prefix else ""
 
     # Metric Bento Cards
     metrics_html = "\n".join(
@@ -162,7 +179,7 @@ def render_index_html(listing: PropertyListing) -> str:
         f"""
         <article class="gallery-item" data-gallery-item="{_esc(g.id)}" data-item-category="{_esc(g.category)}">
           <div class="gallery-thumb">
-            <img src="{_esc(g.image_path)}" alt="{_esc(g.title)}" loading="lazy" />
+            <img src="{_esc(_asset(g.image_path))}" alt="{_esc(g.title)}" loading="lazy" />
           </div>
           <div class="gallery-meta">
             <div class="gallery-cat">{_esc(g.category)}</div>
@@ -175,7 +192,7 @@ def render_index_html(listing: PropertyListing) -> str:
     )
 
     return f"""<!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="light"{html_prefix_attr}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -184,8 +201,8 @@ def render_index_html(listing: PropertyListing) -> str:
   <meta property="og:title" content="{_esc(listing.street_address)} — Turnkey Medical &amp; Executive Campus for Lease" />
   <meta property="og:description" content="{_esc(listing.subheadline)}" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="assets/images/exterior-renovated.jpg" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta property="og:image" content="{_esc(_asset('assets/images/exterior-renovated.jpg'))}" />
+  <link rel="stylesheet" href="{_esc(_asset('styles.css'))}" />
   <script type="application/ld+json">{json_ld_str}</script>
 </head>
 <body>
@@ -267,7 +284,7 @@ def render_index_html(listing: PropertyListing) -> str:
           <div class="hero-image-frame">
             <img
               id="hero-main-image"
-              src="assets/images/exterior-renovated.jpg"
+              src="{_esc(_asset('assets/images/exterior-renovated.jpg'))}"
               alt="207 Elk Ave S Renovated Medical &amp; Executive Exterior Concept"
             />
           </div>
@@ -380,10 +397,10 @@ def render_index_html(listing: PropertyListing) -> str:
             </span>
 
             <div class="comparison-layer comparison-after">
-              <img id="studio-after-img" src="{_esc(first_tr.after_image)}" alt="{_esc(first_tr.after_label)}" />
+              <img id="studio-after-img" src="{_esc(_asset(first_tr.after_image))}" alt="{_esc(first_tr.after_label)}" />
             </div>
             <div class="comparison-layer comparison-before" id="studio-before-layer">
-              <img id="studio-before-img" src="{_esc(first_tr.before_image)}" alt="{_esc(first_tr.before_label)}" />
+              <img id="studio-before-img" src="{_esc(_asset(first_tr.before_image))}" alt="{_esc(first_tr.before_label)}" />
             </div>
 
             <div class="comparison-handle" id="studio-handle">
@@ -448,7 +465,7 @@ def render_index_html(listing: PropertyListing) -> str:
             </div>
 
             <div class="floorplan-canvas" id="floorplan-canvas-wrap" title="Click to enlarge architectural schematic">
-              <img id="floorplan-img" src="{_esc(first_floor.floorplan_image)}" alt="{_esc(first_floor.name)} Floorplan" />
+              <img id="floorplan-img" src="{_esc(_asset(first_floor.floorplan_image))}" alt="{_esc(first_floor.name)} Floorplan" />
             </div>
 
             <p id="floorplan-summary" style="font-size: 0.88rem; color: #3f4f56; margin-top: 1rem;">
@@ -643,7 +660,7 @@ def render_index_html(listing: PropertyListing) -> str:
                 <strong>Certified Two-Tract Boundary Survey (Tract 1 &amp; Tract 2)</strong>
                 <span class="zone-badge">0.84 Total Campus Acres</span>
               </div>
-              <img src="assets/images/survey-two-tracts.png" alt="Certified Two-Tract Survey for 207 Elk Ave S" />
+              <img src="{_esc(_asset('assets/images/survey-two-tracts.png'))}" alt="Certified Two-Tract Survey for 207 Elk Ave S" />
               <p style="font-size:0.84rem; color:#4b5c63; margin-top:0.75rem;">
                 Survey by Michael R. Gooding PE, RLS — showing Tract 1 (0.39 AC Medical Building at Elk Ave S &amp; Campbell St E)
                 and Tract 2 (0.45 AC Dedicated Parking Lot directly across Elk Ave S).
@@ -670,14 +687,14 @@ def render_index_html(listing: PropertyListing) -> str:
 
             <div class="parcel-cards">
               <div class="parcel-card">
-                <img src="assets/images/aerial-building-boundary.jpg" alt="Tract 1 Building Boundary Aerial" loading="lazy" />
+                <img src="{_esc(_asset('assets/images/aerial-building-boundary.jpg'))}" alt="Tract 1 Building Boundary Aerial" loading="lazy" />
                 <div class="parcel-card-body">
                   <strong style="font-size:0.92rem;">Tract 1: Medical Building (0.39 AC)</strong>
                   <p style="font-size:0.8rem; color:var(--text-secondary);">2-story brick core + 1-story clinical wing + curbside &amp; side ADA parking.</p>
                 </div>
               </div>
               <div class="parcel-card">
-                <img src="assets/images/aerial-parking-lot-boundary.jpg" alt="Tract 2 Dedicated Parking Lot Boundary Aerial" loading="lazy" />
+                <img src="{_esc(_asset('assets/images/aerial-parking-lot-boundary.jpg'))}" alt="Tract 2 Dedicated Parking Lot Boundary Aerial" loading="lazy" />
                 <div class="parcel-card-body">
                   <strong style="font-size:0.92rem;">Tract 2: Dedicated Parking (0.45 AC)</strong>
                   <p style="font-size:0.8rem; color:var(--text-secondary);">Expansive paved private lot directly across Elk Ave S.</p>
@@ -727,7 +744,7 @@ def render_index_html(listing: PropertyListing) -> str:
           <div class="owner-card">
             <div class="owner-header">
               <img
-                src="{_esc(listing.contact.portrait_image)}"
+                src="{_esc(_asset(listing.contact.portrait_image))}"
                 alt="{_esc(listing.contact.name)}"
                 class="owner-avatar"
               />
@@ -838,7 +855,7 @@ def render_index_html(listing: PropertyListing) -> str:
   <div id="lightbox-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Image Lightbox">
     <div class="lightbox-content">
       <div class="lightbox-img-wrap">
-        <img id="lightbox-image" src="assets/images/exterior-renovated.jpg" alt="Enlarged Property View" />
+        <img id="lightbox-image" src="{_esc(_asset('assets/images/exterior-renovated.jpg'))}" alt="Enlarged Property View" />
       </div>
       <div class="lightbox-bar">
         <div>
@@ -869,10 +886,27 @@ def render_index_html(listing: PropertyListing) -> str:
 
   <!-- Embedded Canonical Property Data -->
   <script id="property-data-json" type="application/json">{embedded_data_str}</script>
-  <script src="app.js"></script>
+  <script src="{_esc(_asset('app.js'))}"></script>
 </body>
 </html>
 """
+
+
+def build_root_pages_entry(
+    repo_root: Path = REPO_ROOT_DIR,
+    asset_prefix: str = ROOT_STATIC_PREFIX,
+) -> Path:
+    """Write root-level index.html and .nojekyll for direct GitHub Pages branch deployment."""
+    listing = build_property_listing()
+    verify_static_assets(listing, STATIC_SOURCE_DIR)
+    repo_root.mkdir(parents=True, exist_ok=True)
+    root_index = repo_root / "index.html"
+    root_index.write_text(
+        render_index_html(listing, asset_prefix=asset_prefix),
+        encoding="utf-8",
+    )
+    (repo_root / ".nojekyll").write_text("", encoding="utf-8")
+    return root_index
 
 
 def verify_static_assets(listing: PropertyListing, root_dir: Path = STATIC_SOURCE_DIR) -> list[Path]:

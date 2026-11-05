@@ -41,6 +41,8 @@ Designed with Apple/Google-caliber editorial UI/UX, this application generalizes
 
 ```text
 201-elk-ave-website/
+├── index.html                   # Root static entrypoint for GitHub Pages (references src/elk_ave/static/)
+├── .nojekyll                    # Bypasses Jekyll processing on GitHub Pages
 ├── main.py                      # Thin CLI entrypoint (build, check, serve)
 ├── pyproject.toml               # Python project metadata (zero external runtime dependencies)
 ├── AGENTS.md                    # Repository engineering & architecture rules
@@ -72,13 +74,15 @@ This repository uses Python 3.9+ standard library modules only and requires zero
 uv run python3 main.py check
 ```
 
-### 2. Build Static Site (`dist/`)
+### 2. Build Static Site (`dist/` & GitHub Pages Root Entrypoint)
 
 ```bash
 uv run python3 main.py build
 ```
 
-This generates a self-contained static bundle in `dist/index.html` (which can be opened directly in any browser or served via the local HTTP server).
+This generates:
+- A self-contained static bundle in `dist/index.html` (which can be opened directly or served via the local HTTP server).
+- Synchronized root-level `index.html` and `.nojekyll` files configured with `data-asset-prefix="src/elk_ave/static"` so GitHub Pages branch deployments from `/` (root) load all stylesheets, scripts, and images directly without asset duplication.
 
 ### 3. Run Local Preview Server
 

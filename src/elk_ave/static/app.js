@@ -26,6 +26,19 @@
     }
   }
 
+  function resolveAssetPath(relPath) {
+    if (!relPath) return relPath;
+    const rawPrefix = (
+      document.documentElement.getAttribute("data-asset-prefix") || ""
+    )
+      .trim()
+      .replace(/^\/+|\/+$/g, "");
+    if (!rawPrefix) return relPath;
+    const cleanPath = String(relPath).replace(/^\/+/, "");
+    if (cleanPath.startsWith(rawPrefix + "/")) return cleanPath;
+    return `${rawPrefix}/${cleanPath}`;
+  }
+
   function formatUSD(amount) {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -92,7 +105,7 @@
         if (!view) return;
         buttons.forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
-        heroImg.src = view.src;
+        heroImg.src = resolveAssetPath(view.src);
         if (heroLabel) heroLabel.textContent = view.label;
         if (heroSub) heroSub.textContent = view.sub;
       });
@@ -206,11 +219,11 @@
       });
 
       if (beforeImg) {
-        beforeImg.src = item.before_image;
+        beforeImg.src = resolveAssetPath(item.before_image);
         beforeImg.alt = `${item.title} - ${item.before_label}`;
       }
       if (afterImg) {
-        afterImg.src = item.after_image;
+        afterImg.src = resolveAssetPath(item.after_image);
         afterImg.alt = `${item.title} - ${item.after_label}`;
       }
       if (beforeBadge) beforeBadge.textContent = item.before_label;
@@ -225,7 +238,7 @@
           altBtn.style.display = "inline-flex";
           altBtn.textContent = `View ${item.alt_label}`;
           altBtn.onclick = () => {
-            if (afterImg) afterImg.src = item.alt_image;
+            if (afterImg) afterImg.src = resolveAssetPath(item.alt_image);
             if (afterBadge) afterBadge.textContent = item.alt_label;
             setSliderPos(12);
           };
@@ -249,7 +262,7 @@
           (t) => t.id === state.activeTransformId
         );
         if (item && afterImg && afterBadge) {
-          afterImg.src = item.after_image;
+          afterImg.src = resolveAssetPath(item.after_image);
           afterBadge.textContent = item.after_label;
         }
         setSliderPos(pos);
@@ -294,7 +307,7 @@
       });
 
       if (imgEl) {
-        imgEl.src = floor.floorplan_image;
+        imgEl.src = resolveAssetPath(floor.floorplan_image);
         imgEl.alt = `${floor.name} Architectural Floorplan`;
       }
       if (nameEl) nameEl.textContent = floor.name;
@@ -534,7 +547,7 @@
     const titleEl = document.getElementById("lightbox-title");
     const capEl = document.getElementById("lightbox-caption");
     if (!modal || !img) return;
-    img.src = src;
+    img.src = resolveAssetPath(src);
     img.alt = title;
     if (titleEl) titleEl.textContent = title;
     if (capEl) capEl.textContent = caption || "";

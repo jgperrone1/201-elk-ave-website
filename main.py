@@ -8,7 +8,12 @@ import sys
 from pathlib import Path
 
 from src.elk_ave.catalog import build_property_listing
-from src.elk_ave.renderer import STATIC_SOURCE_DIR, build_static_site, verify_static_assets
+from src.elk_ave.renderer import (
+    STATIC_SOURCE_DIR,
+    build_root_pages_entry,
+    build_static_site,
+    verify_static_assets,
+)
 from src.elk_ave.server import create_server
 
 logger = logging.getLogger("elk_ave.cli")
@@ -76,6 +81,9 @@ def main(argv: list[str] | None = None) -> int:
     if command == "build":
         output_dir = getattr(args, "output", Path("dist"))
         manifest = build_static_site(output_dir)
+        if output_dir == Path("dist"):
+            root_index = build_root_pages_entry()
+            logger.info("Synchronized GitHub Pages root entrypoint: %s", root_index)
         logger.info(
             "Static site built: output_dir=%s verified_assets=%d html_bytes=%d",
             manifest["output_dir"],
