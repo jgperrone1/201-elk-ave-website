@@ -82,7 +82,7 @@
 
     const views = {
       renovated: {
-        src: "assets/images/exterior-renovated.jpg",
+        src: "assets/images/exterior_wellness_no_cafe.png",
         label: "Renovated Architectural Concept",
         sub: "Modernized brick & dark architectural bronze facade along Elk Ave S",
       },

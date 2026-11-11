@@ -1,13 +1,16 @@
 # Completion Report: 207 Elk Ave S Medical & Executive Leasing Platform
 
 **Branches:** `dev`, `main`  
-**Date:** 2026-11-10  
+**Date:** 2026-11-11  
 **Status:** Completed & Validated
 
 ---
 
 ## 1. Scope & Key Changes
 
+- **Exterior & Waiting Room Photo Replacements (No Cafe) (`src/elk_ave/catalog.py`, `src/elk_ave/renderer.py`, `src/elk_ave/static/app.js`)**:
+  - Replaced exterior renovation rendering across the Hero image switcher, OpenGraph metadata, Transformation Studio, and Gallery with `assets/images/exterior_wellness_no_cafe.png`, removing "CAFE" signage from the building facade.
+  - Replaced renovated waiting lounge concept across the Transformation Studio and Gallery with `assets/images/Gemini_No_Cafe.jpeg`, removing "CAFE" branding from the wood feature wall.
 - **Disclosures & Disclaimers Section & Navigation Tab (`src/elk_ave/renderer.py`, `src/elk_ave/static/styles.css`)**:
   - Added a prominent, styled "Disclosures" tab in primary navigation and footer linking to `#disclosures`.
   - Added dedicated disclosures card grid featuring verbatim legal text:

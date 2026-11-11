@@ -200,7 +200,7 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
   <meta property="og:title" content="{_esc(listing.street_address)} — Turnkey Medical &amp; Executive Campus for Lease" />
   <meta property="og:description" content="{_esc(listing.subheadline)}" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="{_esc(_asset('assets/images/exterior-renovated.jpg'))}" />
+  <meta property="og:image" content="{_esc(_asset('assets/images/exterior_wellness_no_cafe.png'))}" />
   <link rel="stylesheet" href="{_esc(_asset('styles.css'))}" />
   <script type="application/ld+json">{json_ld_str}</script>
 </head>
@@ -283,7 +283,7 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
           <div class="hero-image-frame">
             <img
               id="hero-main-image"
-              src="{_esc(_asset('assets/images/exterior-renovated.jpg'))}"
+              src="{_esc(_asset('assets/images/exterior_wellness_no_cafe.png'))}"
               alt="207 Elk Ave S Renovated Medical &amp; Executive Exterior Concept"
             />
           </div>
@@ -799,7 +799,7 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
   <div id="lightbox-modal" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Image Lightbox">
     <div class="lightbox-content">
       <div class="lightbox-img-wrap">
-        <img id="lightbox-image" src="{_esc(_asset('assets/images/exterior-renovated.jpg'))}" alt="Enlarged Property View" />
+        <img id="lightbox-image" src="{_esc(_asset('assets/images/exterior_wellness_no_cafe.png'))}" alt="Enlarged Property View" />
       </div>
       <div class="lightbox-bar">
         <div>

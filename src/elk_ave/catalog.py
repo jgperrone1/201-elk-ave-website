@@ -302,7 +302,7 @@ def build_property_listing() -> PropertyListing:
             before_label="Current Clinical Exterior",
             before_image="assets/images/exterior-original.jpg",
             after_label="Renovated Architectural Concept",
-            after_image="assets/images/exterior-renovated.jpg",
+            after_image="assets/images/exterior_wellness_no_cafe.png",
             alt_image="assets/images/aerial-front-facade.jpg",
             alt_label="Aerial Campus Perspective",
             description=(
@@ -324,7 +324,7 @@ def build_property_listing() -> PropertyListing:
             before_label="Existing Waiting Room",
             before_image="assets/images/waiting-room-original.jpg",
             after_label="Modernized Lounge Concept",
-            after_image="assets/images/waiting-room-renovated.jpg",
+            after_image="assets/images/Gemini_No_Cafe.jpeg",
             alt_image="assets/images/practice-intake-business-office.jpg",
             alt_label="Secondary / Pediatric Waiting Room",
             description=(
@@ -709,7 +709,7 @@ def build_property_listing() -> PropertyListing:
             title="Renovated Exterior Architectural Rendering",
             caption="Modernized brick & dark architectural bronze facade concept along Elk Ave S.",
             category="Exterior & Aerial",
-            image_path="assets/images/exterior-renovated.jpg",
+            image_path="assets/images/exterior_wellness_no_cafe.png",
             provenance=Provenance(SOURCE_PDF, (5, 17), "Page 5 Renovated Exterior."),
         ),
         GalleryAsset(
@@ -797,7 +797,7 @@ def build_property_listing() -> PropertyListing:
             title="Hospitality-Inspired Patient Waiting Lounge",
             caption="Warm biophilic waiting room concept with wood flooring and comfortable seating.",
             category="Lobby & Waiting",
-            image_path="assets/images/waiting-room-renovated.jpg",
+            image_path="assets/images/Gemini_No_Cafe.jpeg",
             provenance=Provenance(SOURCE_PDF, (7,), "Page 7 Waiting Room Renovated."),
         ),
         GalleryAsset(
