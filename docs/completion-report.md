@@ -1,27 +1,34 @@
-# Completion Report: 207 Elk Ave S Medical & Executive Leasing Platform (Local MVP)
+# Completion Report: 207 Elk Ave S Medical & Executive Leasing Platform
 
-**Branch:** `feature/prototype-local`  
-**Date:** 2026-11-04  
-**Commits:** `887ead6` (`chore(repo)`), plus feature implementation commit (`feat(web)`)  
+**Branches:** `dev`, `main`  
+**Date:** 2026-11-10  
 **Status:** Completed & Validated
 
 ---
 
 ## 1. Scope & Key Changes
 
-- **PDF Asset Extraction & Generalization (`src/elk_ave/catalog.py`, `src/elk_ave/static/assets/images/`)**:
-  - Extracted 40 full-resolution photographs, architectural renovation renderings, drone aerials, 1st and 2nd floor schematics, and certified boundary surveys from the reference presentation (`references/207 Elk Ave for TWU.pdf`).
-  - Generalized all 28 single-tenant pitch points into 21 broadly applicable medical commercial real estate advantages across 4 strategic pillars and 7 healthcare tenant archetypes (Primary Care & Multi-Specialty, Urgent Care & Diagnostics, Dental & Oral Surgery, Dermatology & MedSpa, Physical & Pediatric Rehab, Behavioral Health & Psychiatry, and Healthcare Workforce Training).
-- **Domain Architecture & Deterministic TI Calculator (`src/elk_ave/models.py`, `src/elk_ave/calculator.py`)**:
-  - Implemented immutable domain models with source provenance tracking.
-  - Built a deterministic **Clinical Footprint & TI Capital Preservation Estimator** that maps specialty profiles, desired clinical rooms (1–45), daily patient volumes (5–500), and finish tiers onto recommended building configurations while quantifying Tenant Improvement (TI) capital savings vs. cold-shell medical construction.
-- **Apple / Google-Caliber Editorial Web Application (`src/elk_ave/renderer.py`, `src/elk_ave/static/styles.css`, `src/elk_ave/static/app.js`)**:
-  - Built a responsive, accessible (`WCAG AA+`), light/dark theme-aware static web application featuring a cinematic exterior switcher hero, Bento-grid metrics, interactive Specialty Fit Explorer, draggable Before/After Transformation Studio across 6 property spaces, Dual-Level Floorplan Explorer with fullscreen zoom, real-time TI Capital Estimator, 20-asset filterable gallery with keyboard-navigable Lightbox, and an auto-synchronized Owner Tour & Leasing Briefing Generator.
-  - Embedded Schema.org `RealEstateListing` JSON-LD metadata.
-- **CLI & Local Preview Server (`main.py`, `src/elk_ave/server.py`)**:
-  - Implemented `build`, `check`, and `serve` CLI subcommands plus `/api/health`, `/api/property`, and `/api/estimate` JSON endpoints using Python's standard library only.
-- **Repository Hygiene & Documentation (`.gitignore`, `README.md`, `AGENTS.md`, `pyproject.toml`)**:
-  - Updated ignore rules, project metadata, usage documentation, and tailored `AGENTS.md` with project-specific architecture and validation gates.
+- **Disclosures & Disclaimers Section & Navigation Tab (`src/elk_ave/renderer.py`, `src/elk_ave/static/styles.css`)**:
+  - Added a prominent, styled "Disclosures" tab in primary navigation and footer linking to `#disclosures`.
+  - Added dedicated disclosures card grid featuring verbatim legal text:
+    1. **Real Estate Licensing & Ownership Disclosure**: 207 Elk Ave S ownership by 207 ELK, LLC; Shazia (Shaz) Perrone direct leasing/management under Tennessee statutory owner-exemption laws (T.C.A. § 62-13-104); active commercial real estate sales associate license in Florida with RealtyMark Solutions, LLC; no TN brokerage/agency relationship created; recommendation of independent advisory counsel.
+    2. **Renderings & Information Disclaimer**: Architectural visualizations and conceptual renderings are for illustrative purposes only and do not constitute warranties of final finishes; building conditions subject to final plans/permits; square footage, specs, and operational expenses compiled in good faith and subject to change without notice.
+- **Scrubbing of Code, Capital & IBC Group B References (`src/elk_ave/catalog.py`, `src/elk_ave/renderer.py`, `src/elk_ave/calculator.py`, `src/elk_ave/static/app.js`)**:
+  - Removed all references to: `Code, Permitting & Capital Efficiency`, `CODE & CAPITAL`, `Group B`, and `Protected IBC Medical Occupancy`.
+  - Removed from footer: `IBC Group B Medical & Executive Office · 0.84 Total Acres (Building + Dedicated Parking)`.
+  - Re-structured strategic pillars from 4 to 3 clean pillars (18 points total: Turnkey Infrastructure, Parking & Downtown Location, Healthcare Heritage & Partnership).
+  - Cleaned tenant archetype descriptions to focus on clinical operational suitability without code classification claims.
+- **Cafe References & Image Removals (`src/elk_ave/catalog.py`, `src/elk_ave/renderer.py`)**:
+  - Removed cafe concepts from ground floor zoning and tenant archetypes.
+  - Removed front lobby / cafe transformation pair.
+- **TI Capital Preservation Estimator Transition (`src/elk_ave/calculator.py`, `main.py`, `src/elk_ave/renderer.py`, `src/elk_ave/static/app.js`)**:
+  - Removed public-facing TI Estimator calculator section and client-side calculator code from website.
+  - Preserved full deterministic calculator business logic in `src/elk_ave/calculator.py` for ownership's private use.
+  - Added `main.py estimate` CLI subcommand allowing ownership to calculate clinical footprint and TI capital preservation offline with customizable parameters (`--rooms`, `--specialty`, `--patients`, `--tier`, `--no-xray`, `--conference`).
+- **Gallery Corrections (`src/elk_ave/catalog.py`)**:
+  - Clinical Interiors: `Specialty Procedure & Dermatology Suite (Renovation Concept)` now explicitly states conceptual renovation rendering (not actual existing condition).
+  - Removed `Fayetteville Public Utilities Easement Survey`.
+  - Swapped images: `Business & Intake Office Suite` now points to `practice-pediatric-waiting.jpg` (pass-through window) and `Dedicated Pediatric / Specialty Sub-Waiting Room` points to `practice-intake-business-office.jpg` (built-in aquarium window).
 - **Mobile Responsive & Header Containment Optimization (`src/elk_ave/static/styles.css`)**:
   - Resolved mobile horizontal overflow where the title bar previously forced layout width to ~484px on small viewports.
   - Hid secondary location badge on screens <= 640px, scaled mobile header action buttons and badges, added `html`/`body` horizontal overflow containment, and converted inquiry call-to-actions to responsive full-width mobile controls.
@@ -32,9 +39,10 @@
 
 | Gate | Command | Status / Result |
 | :--- | :--- | :--- |
-| **Unit & Integration Tests** | `uv run python3 -m unittest discover -s tests -v` | **PASS** (14 tests in `0.05s`, 0 failures, 0 errors) |
-| **Catalog & Asset Verification** | `uv run python3 main.py check` | **PASS** (`floors=2`, `archetypes=7`, `pillars=4`, `verified_assets=32`) |
-| **Static Site Build** | `uv run python3 main.py build` | **PASS** (`dist/index.html`, root `index.html` + `.nojekyll` for GitHub Pages, 40 verified images) |
+| **Unit & Integration Tests** | `uv run python3 -m unittest discover -s tests -v` | **PASS** (15 tests in `0.05s`, 0 failures, 0 errors) |
+| **Catalog & Asset Verification** | `uv run python3 main.py check` | **PASS** (`floors=2`, `archetypes=7`, `pillars=3`, `verified_assets=28`) |
+| **Static Site Build** | `uv run python3 main.py build` | **PASS** (`dist/index.html`, root `index.html` + `.nojekyll` for GitHub Pages, 28 verified images) |
+| **Ownership CLI Estimator** | `uv run python3 main.py estimate --rooms 16 --specialty dermatology-aesthetics` | **PASS** (deterministic capital estimate and speed-to-market calculations) |
 | **Bytecode & Syntax Check** | `uv run python3 -m compileall -q src tests main.py` | **PASS** (0 syntax/compilation errors) |
 | **Formatter / Linter (`ruff`)** | *Not configured* | Explicitly unconfigured in offline local environment |
 | **Type Checker (`pyright`)** | *Not configured* | Explicitly unconfigured in offline local environment |

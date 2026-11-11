@@ -53,7 +53,6 @@ def build_json_ld(listing: PropertyListing) -> dict[str, Any]:
             {"@type": "PropertyValue", "name": "Plumbed Clinical & Exam Rooms", "value": "35+"},
             {"@type": "PropertyValue", "name": "Dedicated Procedure Suites", "value": "7"},
             {"@type": "PropertyValue", "name": "Restrooms", "value": "12"},
-            {"@type": "PropertyValue", "name": "IBC Occupancy", "value": listing.occupancy_classification},
             {"@type": "PropertyValue", "name": "Dedicated Parking Lot Acres", "value": str(listing.parking_lot_acres)},
         ],
         "seller": {
@@ -225,10 +224,10 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
           <li><a href="#specialties">Specialties</a></li>
           <li><a href="#transformations">Renovations</a></li>
           <li><a href="#floorplans">Floorplans</a></li>
-          <li><a href="#calculator">TI Calculator</a></li>
           <li><a href="#advantages">Advantages</a></li>
           <li><a href="#location">Parking</a></li>
           <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#disclosures" class="nav-disclosure-link">Disclosures</a></li>
         </ul>
       </nav>
 
@@ -246,7 +245,7 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
         <div class="hero-copy">
           <div class="hero-badges">
             <span class="badge badge--dot">Available for Lease · Single-Floor or Full-Campus</span>
-            <span class="badge">IBC Group B Medical</span>
+            <span class="badge">Turnkey Outpatient Facility</span>
             <span class="badge">Huntsville North Growth Corridor</span>
           </div>
 
@@ -261,7 +260,7 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
 
           <div class="hero-cta-row">
             <a href="#floorplans" class="btn btn--primary">Explore Interactive Floorplans</a>
-            <a href="#calculator" class="btn btn--secondary">Calculate TI Capital Savings</a>
+            <a href="#contact" class="btn btn--secondary">Schedule Tour &amp; Inquire</a>
           </div>
 
           <div class="hero-quick-facts">
@@ -344,9 +343,9 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
               {first_arch_why}
             </ul>
             <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem;">
-              <button type="button" id="arch-load-calc-btn" class="btn btn--primary">
-                Load Profile into TI Capital Estimator →
-              </button>
+              <a href="#contact" id="arch-inquire-btn" class="btn btn--primary">
+                Inquire About This Specialty Layout →
+              </a>
               <a href="#contact" class="btn btn--secondary">Request Custom Space Plan</a>
             </div>
           </div>
@@ -499,138 +498,15 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
       </div>
     </section>
 
-    <!-- Clinical Footprint & TI Capital Preservation Calculator -->
-    <section id="calculator" class="section section--alt">
-      <div class="container">
-        <div class="section-header">
-          <span class="eyebrow">Capital Stewardship &amp; Speed-to-Market Model</span>
-          <h2 class="section-title">Clinical Footprint &amp; TI Capital Preservation Estimator</h2>
-          <p class="section-subtitle">
-            Cold-shell medical construction in 2026 averages $215–$240+/SF due to concrete trenching,
-            wet-wall plumbing, and ADA restroom cores. Configure your practice parameters to quantify your savings at 207 Elk Ave S.
-          </p>
-        </div>
-
-        <div class="calculator-shell">
-          <form id="clinical-calc-form" onsubmit="return false;">
-            <div class="calc-form-group">
-              <label class="calc-label" for="calc-specialty">1. Clinical Specialty Profile</label>
-              <select id="calc-specialty" class="calc-select">
-                {calc_options_html}
-              </select>
-            </div>
-
-            <div class="calc-form-group">
-              <label class="calc-label" for="calc-rooms">
-                <span>2. Desired Plumbed Exam / Clinical Suites</span>
-                <span class="calc-label-val" id="calc-rooms-val">20 Rooms</span>
-              </label>
-              <input type="range" id="calc-rooms" class="calc-range" min="4" max="35" value="20" />
-              <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted);">
-                <span>4 Rooms (Boutique Pod)</span>
-                <span>18 Rooms (Single Wing)</span>
-                <span>35 Rooms (Full Campus)</span>
-              </div>
-            </div>
-
-            <div class="calc-form-group">
-              <label class="calc-label" for="calc-patients">
-                <span>3. Projected Daily Patient / Client Visits</span>
-                <span class="calc-label-val" id="calc-patients-val">95 Visits / Day</span>
-              </label>
-              <input type="range" id="calc-patients" class="calc-range" min="15" max="300" step="5" value="95" />
-            </div>
-
-            <div class="calc-form-group">
-              <label class="calc-label" for="calc-tier">4. Interior Finish Customization Tier</label>
-              <select id="calc-tier" class="calc-select">
-                <option value="turnkey-refresh">Turnkey Clinical Refresh (Paint, LED &amp; Flooring Polish)</option>
-                <option value="modern-clinical" selected>Modern Clinical Upgrade (LVP Wood Flooring &amp; Custom Millwork)</option>
-                <option value="bespoke-hospitality">Bespoke Hospitality &amp; MedSpa (Wellness Cafe Lobby &amp; Designer Finishes)</option>
-              </select>
-            </div>
-
-            <div class="calc-checkbox-row">
-              <label class="calc-checkbox-label">
-                <input type="checkbox" id="calc-xray" checked />
-                <span>Utilize existing on-site X-Ray suite, Phlebotomy Blood Draw &amp; Lab rooms</span>
-              </label>
-              <label class="calc-checkbox-label">
-                <input type="checkbox" id="calc-conf" />
-                <span>Include 576 SF clear-span Conference / Didactic Training Hall (#222)</span>
-              </label>
-            </div>
-          </form>
-
-          <div class="calc-results-panel" aria-live="polite">
-            <div>
-              <div class="calc-savings-banner">
-                <div style="font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; color:#a9babf; font-weight:700;">
-                  Estimated TI Capital Preserved vs. Cold Shell Build-Out
-                </div>
-                <div class="calc-savings-val" id="res-capital-saved">$1,711,500</div>
-                <div style="font-size:0.88rem; color:#e2f1ef; margin-top:0.35rem;">
-                  Recommended: <strong id="res-floor-plan">Full Ground Floor Clinical Wing</strong>
-                </div>
-              </div>
-
-              <div class="calc-kpi-grid">
-                <div class="calc-kpi-box">
-                  <div class="calc-kpi-num" id="res-kpi-rooms">24 Plumbed + 7 Proc</div>
-                  <div class="calc-kpi-lbl">Clinical Suite Capacity</div>
-                </div>
-                <div class="calc-kpi-box">
-                  <div class="calc-kpi-num" id="res-kpi-months">11 Months Faster</div>
-                  <div class="calc-kpi-lbl">Speed to Market Advantage</div>
-                </div>
-                <div class="calc-kpi-box">
-                  <div class="calc-kpi-num" id="res-kpi-parking">75+ Spaces</div>
-                  <div class="calc-kpi-lbl">0.5-Acre Lot + On-Site ADA</div>
-                </div>
-              </div>
-
-              <div class="cost-bars">
-                <div class="cost-bar-row">
-                  <div class="cost-bar-meta">
-                    <span>Typical Cold-Shell Medical Build-Out</span>
-                    <strong id="res-shell-cost">$2,257,500</strong>
-                  </div>
-                  <div class="cost-bar-track">
-                    <div class="cost-bar-fill cost-bar-fill--shell"></div>
-                  </div>
-                </div>
-                <div class="cost-bar-row">
-                  <div class="cost-bar-meta">
-                    <span>207 Elk Ave S Turnkey Adaptive Reuse Estimate</span>
-                    <strong id="res-ti-cost" style="color:#5eead4;">$546,000</strong>
-                  </div>
-                  <div class="cost-bar-track">
-                    <div class="cost-bar-fill cost-bar-fill--turnkey" id="res-ti-bar" style="width: 24%;"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div style="font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; color:#5eead4; font-weight:700; margin-bottom:0.5rem;">
-                Included Infrastructure Highlights
-              </div>
-              <ul id="res-advantages-list" style="padding-left:1.1rem; font-size:0.86rem; color:#d1e0dd; display:grid; gap:0.35rem;"></ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 21 Strategic Advantages Across 4 Pillars -->
+    <!-- Key Strategic Advantages -->
     <section id="advantages" class="section">
       <div class="container">
         <div class="section-header">
           <span class="eyebrow">Comprehensive Due Diligence Briefing</span>
-          <h2 class="section-title">21 Reasons 207 Elk Ave S Anchors Healthcare in Southern Middle Tennessee</h2>
+          <h2 class="section-title">Key Strategic Advantages: Why 207 Elk Ave S Anchors Healthcare in Southern Middle Tennessee</h2>
           <p class="section-subtitle">
             Distilled from ownership’s institutional property briefing—covering turnkey wet-wall density,
-            IBC Group B code protection, unmatched downtown parking, and flexible lease structures.
+            dedicated off-street parking, downtown walkability, and flexible lease structures.
           </p>
         </div>
 
@@ -728,6 +604,50 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
       </div>
     </section>
 
+    <!-- Prominent Disclosure & Disclaimer Section -->
+    <section id="disclosures" class="section section--alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Regulatory Compliance &amp; Due Diligence</span>
+          <h2 class="section-title">Ownership, Licensing &amp; Information Disclosures</h2>
+          <p class="section-subtitle">
+            Statutory licensing exemptions and conceptual rendering disclosures for prospective commercial tenants.
+          </p>
+        </div>
+
+        <div class="disclosure-grid">
+          <article class="disclosure-card">
+            <div class="disclosure-badge">Statutory Notice</div>
+            <h3 class="disclosure-title">Real Estate Licensing &amp; Ownership Disclosure</h3>
+            <div class="disclosure-body">
+              <p>
+                The property located at 207 Elk Avenue South, Fayetteville, TN is owned and operated by 207 ELK, LLC. Shazia (Shaz) Perrone is a principal manager and equity owner of 207 ELK, LLC, and is leasing and managing this property directly as a principal owner under Tennessee statutory owner-exemption laws (T.C.A. &sect; 62-13-104).
+              </p>
+              <p>
+                Shazia Perrone holds an active commercial real estate sales associate license in the State of Florida with RealtyMark Solutions, LLC. Shazia Perrone is not a licensed real estate broker or sales affiliate in the State of Tennessee. No licensed real estate brokerage, fiduciary representation, or agency relationship is established, offered, or implied through this website or leasing discussions.
+              </p>
+              <p>
+                All prospective tenants are encouraged to retain independent legal, financial, and licensed commercial real estate advisory counsel.
+              </p>
+            </div>
+          </article>
+
+          <article class="disclosure-card">
+            <div class="disclosure-badge">Conceptual Advisory</div>
+            <h3 class="disclosure-title">Renderings &amp; Information Disclaimer</h3>
+            <div class="disclosure-body">
+              <p>
+                All architectural visualizations, conceptual renderings, floor plan layouts, design finishes, and proposed tenant buildouts displayed on this website are for illustrative and conceptual purposes only. They represent potential design concepts and ideas, and do not constitute a representation, warranty, or guarantee of final constructed finishes, materials, fixtures, or completed results. Actual building conditions, suite dimensions, and physical improvements are subject to final architectural plans, municipal code approvals, and mutually executed lease agreements.
+              </p>
+              <p>
+                While all information, square footage calculations, operational expenses, and lease specifications presented on this site are believed to be accurate and compiled in good faith, they are subject to change without notice. Unintentional errors or omissions may occur. Ownership reserves the right to modify property specifications, availability, and pricing at any time. Prospective tenants are advised to independently inspect the property and verify all dimensions, zoning allowances, and lease terms prior to contract execution.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- Direct Principal / Owner Contact & Tour Request Builder -->
     <section id="contact" class="section section--dark">
       <div class="container">
@@ -736,7 +656,7 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
           <h2 class="section-title">Partner Directly with Principal Ownership</h2>
           <p class="section-subtitle">
             Work directly with ownership—without broker friction—to structure a single-floor, phased,
-            or full-building medical lease tailored to your clinical timeline and capital goals.
+            or full-building medical lease tailored to your clinical timeline and program goals.
           </p>
         </div>
 
@@ -800,8 +720,7 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
               Generate Custom Tour &amp; Leasing Briefing
             </h3>
             <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:1.25rem;">
-              Your selections from the TI Capital Estimator are automatically synchronized below. Customize your
-              practice details and send directly to ownership or copy to your clipboard.
+              Select your clinical specialty and desired suite footprint below. A customized leasing briefing will synchronize in real time for direct discussion with ownership.
             </p>
 
             <div class="form-row-2" style="margin-bottom:1rem;">
@@ -817,12 +736,37 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
 
             <div class="form-row-2" style="margin-bottom:1rem;">
               <div>
+                <label class="calc-label" for="inq-specialty">Specialty / Clinical Profile</label>
+                <select id="inq-specialty" class="calc-select">
+                  <option value="Primary Care &amp; Multi-Specialty Medical Group">Primary Care &amp; Multi-Specialty</option>
+                  <option value="Urgent Care, Walk-In &amp; Occupational Medicine">Urgent Care &amp; Occupational Medicine</option>
+                  <option value="Dental Practice &amp; Oral Health Clinic">Dental &amp; Oral Surgery</option>
+                  <option value="Dermatology, Aesthetics &amp; Procedure Center">Dermatology &amp; Aesthetics</option>
+                  <option value="Physical, Occupational &amp; Pediatric Rehabilitation">Physical &amp; Pediatric Rehabilitation</option>
+                  <option value="Behavioral Health, Psychiatry &amp; Counseling">Behavioral Health &amp; Psychiatry</option>
+                  <option value="Healthcare Workforce Training &amp; Allied Health Campus">Healthcare Workforce Training</option>
+                  <option value="Outpatient Medical &amp; Executive Office Suite">Other Outpatient / Medical Specialty</option>
+                </select>
+              </div>
+              <div>
+                <label class="calc-label" for="inq-footprint">Target Footprint Configuration</label>
+                <select id="inq-footprint" class="calc-select">
+                  <option value="Full Ground Floor Clinical Wing (24+ Plumbed Exam Rooms, 7 Proc Suites)">Full Ground Floor Wing (24+ Rooms, 7 Proc Suites)</option>
+                  <option value="Ground Floor Phased Clinical Pod (12–16 Plumbed Rooms)">Ground Floor Clinical Pod (12–16 Rooms)</option>
+                  <option value="Upper Level Executive &amp; Clinical Suite (11 Plumbed Rooms, 16 Offices)">Upper Level Suite (11 Rooms, 16 Offices)</option>
+                  <option value="Full Two-Story Medical Campus (35+ Plumbed Rooms, 17,300 SF)">Full Campus (35+ Plumbed Rooms, 17,300 SF)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row-2" style="margin-bottom:1rem;">
+              <div>
                 <label class="calc-label" for="inq-timeline">Target Occupancy Horizon</label>
-                <input type="text" id="inq-timeline" class="calc-input" value="Q1 / Q2 Next Year (Turnkey Launch)" />
+                <input type="text" id="inq-timeline" class="calc-input" value="Q1 / Q2 Next Year" />
               </div>
               <div>
                 <label class="calc-label" for="inq-notes">Specific Clinical or Lease Notes</label>
-                <input type="text" id="inq-notes" class="calc-input" placeholder="e.g., Ground floor wing + X-ray room" />
+                <input type="text" id="inq-notes" class="calc-input" placeholder="e.g., Ground floor wing + X-ray suite access" />
               </div>
             </div>
 
@@ -879,7 +823,7 @@ def render_index_html(listing: PropertyListing, asset_prefix: str = "") -> str:
         <p style="margin-top:0.25rem;">Owned &amp; Managed by 207 Elk LLC · Principal/Owner: Shaz Perrone · (973) 271-5324 · Shaz.Perrone@gmail.com</p>
       </div>
       <div style="text-align:right;">
-        <span>IBC Group B Medical &amp; Executive Office</span> · <span>0.84 Total Acres (Building + Dedicated Parking)</span>
+        <a href="#disclosures" class="footer-disclosure-link" style="color:var(--text-on-dark-muted); text-decoration:underline;">Real Estate Licensing Disclosure &amp; Disclaimers</a>
       </div>
     </div>
   </footer>

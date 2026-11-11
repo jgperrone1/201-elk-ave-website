@@ -90,12 +90,12 @@ def build_property_listing() -> PropertyListing:
             provenance=Provenance(SOURCE_PDF, (16, 22), "Page 22 Point 9."),
         ),
         MetricHighlight(
-            id="ibc-occupancy",
-            value="Group B",
-            unit_or_label="Protected IBC Medical Occupancy",
-            detail="Outpatient medical, dental, and clinical training uses remain classified under IBC Group B (Business).",
-            category="Code & Capital",
-            provenance=Provenance(SOURCE_PDF, (23,), "Page 23 Point 10."),
+            id="campus-scale",
+            value="17,300 SF",
+            unit_or_label="Total Two-Story Clinical Footprint",
+            detail="Elevator-connected two-story medical facility on a 0.84-acre total downtown campus.",
+            category="Campus Scale",
+            provenance=Provenance(SOURCE_PDF, (3, 11, 15), "Two-story building and campus acreage."),
         ),
     )
 
@@ -141,7 +141,7 @@ def build_property_listing() -> PropertyListing:
                     ideal_uses=(
                         "High-volume multi-provider check-in",
                         "Well-child vs. sick-visit waiting separation",
-                        "Optional Wellness Cafe or retail apothecary lobby concept",
+                        "Spacious patient arrival lobby and intake reception counter",
                     ),
                 ),
                 SpaceZone(
@@ -317,37 +317,15 @@ def build_property_listing() -> PropertyListing:
             provenance=Provenance(SOURCE_PDF, (4, 5, 11, 17), "Pages 4 & 5 Original vs Renovated exterior."),
         ),
         TransformationPair(
-            id="front-lobby",
-            title="Main Patient Lobby & Hospitality Arrival",
-            subtitle="Turnkey Clinical Check-In or Hospitality-Forward Wellness Cafe Concept",
-            category="Lobby & Arrival",
-            before_label="Existing Clinical Lobby",
-            before_image="assets/images/lobby-original.jpg",
-            after_label="Hospitality Lobby Concept",
-            after_image="assets/images/lobby-renovated.jpg",
-            alt_image="assets/images/practice-checkout-reception.jpg",
-            alt_label="Dedicated Check-Out Window",
-            description=(
-                "The expansive front lobby features built-in reception counters, glass check-in windows, "
-                "and direct sightlines to dual waiting rooms—adaptable for traditional clinical intake "
-                "or a modern hospitality/wellness cafe arrival experience."
-            ),
-            clinical_value=(
-                "Separates incoming patient registration from outbound check-out and clinical corridors, "
-                "reducing lobby congestion during peak clinic hours."
-            ),
-            provenance=Provenance(SOURCE_PDF, (6, 14, 21), "Page 6 Front Lobby Original vs Renovated & Page 21 Point 5."),
-        ),
-        TransformationPair(
             id="waiting-lounge",
             title="Primary Patient Waiting Lounge",
-            subtitle="High-Capacity Patient Seating with Warm Acoustic & Biophilic Finishes",
+            subtitle="High-Capacity Patient Seating with Warm Acoustic Finishes",
             category="Waiting Lounge",
             before_label="Existing Waiting Room",
             before_image="assets/images/waiting-room-original.jpg",
             after_label="Modernized Lounge Concept",
             after_image="assets/images/waiting-room-renovated.jpg",
-            alt_image="assets/images/practice-pediatric-waiting.jpg",
+            alt_image="assets/images/practice-intake-business-office.jpg",
             alt_label="Secondary / Pediatric Waiting Room",
             description=(
                 "Supported by decorative architectural columns and generous ceiling heights, the primary "
@@ -493,12 +471,12 @@ def build_property_listing() -> PropertyListing:
             target_rooms=14,
             why_it_fits=(
                 "7 specialized ground-floor procedure rooms accommodate surgical excisions, Mohs micrographic labs, and energy/laser devices.",
-                "Front lobby and waiting room easily transform into a hospitality-forward Wellness Cafe and retail skincare apothecary.",
+                "Front lobby and waiting lounge easily accommodate an upscale patient arrival desk and dedicated clinical consultation suites.",
                 "Walkable historic downtown square location attracts affluent regional patients across the Huntsville–Fayetteville corridor.",
             ),
             infrastructure_match=(
                 "Procedure suites with medical-grade electrical & wet walls",
-                "Retail/cafe-ready front lobby with separate private check-out",
+                "Dedicated patient arrival reception with separate private check-out",
                 "24+ exam rooms for simultaneous medical and cosmetic tracks",
             ),
             provenance=Provenance(SOURCE_PDF, (5, 6, 7, 8, 20, 24, 25), "Derived from Derm Exam Room rendering (p. 8) and Wellness Cafe concepts (pp. 5-7)."),
@@ -537,7 +515,7 @@ def build_property_listing() -> PropertyListing:
             infrastructure_match=(
                 "16+ private perimeter offices + 11 upper clinical rooms",
                 "2 group therapy / conference halls + 2 staff kitchens",
-                "Protected IBC Group B outpatient classification",
+                "Dedicated exterior egress doors for private patient circulation",
             ),
             provenance=Provenance(SOURCE_PDF, (16, 20, 21, 23, 27), "Generalized from 2nd floor plan and behavioral health vision point 23."),
         ),
@@ -551,11 +529,11 @@ def build_property_listing() -> PropertyListing:
             why_it_fits=(
                 "Upper suite #222 offers a 24 x 24 ft (576 sq ft) clear-span lecture hall alongside built-in lab #235 and 11 sink-equipped simulation rooms.",
                 "Ground-floor reception, dual waiting rooms, and 24+ exam rooms enable public-facing community clinics without mixing patient traffic with instructional zones.",
-                "Post-secondary instruction and outpatient clinical training remain classified under IBC Group B (Business), avoiding costly Group E/A structural retrofits.",
+                "Post-secondary instruction and outpatient clinical training utilize existing multi-room clinical pods and clear-span didactic halls without major structural reconfigurations.",
             ),
             infrastructure_match=(
                 "576 sq ft clear-span classroom + built-in laboratory (#235)",
-                "Protected IBC Group B occupancy for post-secondary clinical training",
+                "Turnkey clinical infrastructure for post-secondary medical & nursing training",
                 "0.5-acre dedicated parking lot for commuter cohorts, faculty & patients",
             ),
             provenance=Provenance(SOURCE_PDF, (18, 19, 20, 21, 22, 23, 24, 26), "Derived from points 1-12 and 19-23."),
@@ -639,39 +617,6 @@ def build_property_listing() -> PropertyListing:
             ),
         ),
         AdvantagePillar(
-            id="code-capital",
-            title="Code, Permitting & Capital Efficiency",
-            subtitle="Preserve Working Capital for Providers, Equipment & Patient Care",
-            summary=(
-                "Protected IBC Group B occupancy and existing medical infrastructure prevent costly "
-                "structural retrofits, allowing tenant capital and healthcare grants to fund equipment "
-                "and clinical operations rather than drywall and plumbing."
-            ),
-            points=(
-                AdvantagePoint(
-                    number=10,
-                    title="Protected IBC Group B Occupancy",
-                    description="Outpatient medical, dental, behavioral health, and post-secondary clinical training facilities remain strictly classified under International Building Code (IBC) Group B (Business), avoiding costly Group E/A/I retrofits.",
-                    pillar_id="code-capital",
-                    provenance=Provenance(SOURCE_PDF, (23,), "Point 10."),
-                ),
-                AdvantagePoint(
-                    number=11,
-                    title="Capital & Grant Optimization",
-                    description="Because the existing clinical layout requires minimal spatial demolition, tenant improvement budgets, rural healthcare grants, and expansion capital can be directed toward medical equipment and talent.",
-                    pillar_id="code-capital",
-                    provenance=Provenance(SOURCE_PDF, (23,), "Point 11 generalized."),
-                ),
-                AdvantagePoint(
-                    number=12,
-                    title="Disciplined Capital Stewardship",
-                    description="Eliminates speculative shell build-out expenditure ($150-$250+/SF in typical medical conversions) through an adaptive reuse model engineered for healthcare operating margin preservation.",
-                    pillar_id="code-capital",
-                    provenance=Provenance(SOURCE_PDF, (23,), "Point 12 generalized."),
-                ),
-            ),
-        ),
-        AdvantagePillar(
             id="parking-location",
             title="Unmatched Parking, Downtown Walkability & Regional Reach",
             subtitle="Dedicated 0.5-Acre Parking Lot + Huntsville Growth Corridor Position",
@@ -681,35 +626,35 @@ def build_property_listing() -> PropertyListing:
             ),
             points=(
                 AdvantagePoint(
-                    number=13,
+                    number=10,
                     title="Immediate Proximity to Historic Downtown Square",
                     description="Situated as the premier commercial medical building directly behind Fayetteville's historic downtown square, offering providers, staff, and patients walkable access to dining, pharmacies, and civic amenities.",
                     pillar_id="parking-location",
                     provenance=Provenance(SOURCE_PDF, (3, 11, 24), "Point 13."),
                 ),
                 AdvantagePoint(
-                    number=14,
+                    number=11,
                     title="Dedicated 0.5-Acre Private Parking Lot Across the Street",
                     description="In addition to curbside and on-site ADA building parking (Tract 1: 0.39 AC), ownership provides a dedicated 0.45-acre (~0.5 AC) paved parking parcel directly across Elk Ave S (Tract 2), eliminating parking constraints.",
                     pillar_id="parking-location",
                     provenance=Provenance(SOURCE_PDF, (11, 15, 24), "Point 14 & Page 15 Survey."),
                 ),
                 AdvantagePoint(
-                    number=15,
+                    number=12,
                     title="Geographic Core for the 3-County Catchment Area",
                     description="Centrally situated in Lincoln County along the US-64 / US-231 / US-431 crossroads to draw patients and clinical staff seamlessly across Lincoln, Moore, Giles, Franklin, Coffee, and Bedford counties.",
                     pillar_id="parking-location",
                     provenance=Provenance(SOURCE_PDF, (24,), "Point 15 generalized."),
                 ),
                 AdvantagePoint(
-                    number=16,
+                    number=13,
                     title="Proximity to HH Lincoln Medical Center",
                     description="Located minutes from Lincoln Medical Center (Huntsville Hospital Health System), facilitating seamless physician hospital privileges, diagnostic coordination, and regional referral networks.",
                     pillar_id="parking-location",
                     provenance=Provenance(SOURCE_PDF, (25,), "Point 17 generalized."),
                 ),
                 AdvantagePoint(
-                    number=17,
+                    number=14,
                     title="Positioned in the High-Growth Huntsville / Rocket City Corridor",
                     description="Located directly north of the booming Huntsville, AL metro corridor, capturing rapid cross-border residential growth and accelerating demand for accessible outpatient specialty care.",
                     pillar_id="parking-location",
@@ -727,28 +672,28 @@ def build_property_listing() -> PropertyListing:
             ),
             points=(
                 AdvantagePoint(
-                    number=18,
+                    number=15,
                     title="Proven Community Healthcare Heritage",
                     description="Recognized throughout Southern Middle Tennessee as a trusted multi-provider medical facility, providing new tenants with immediate local awareness, patient comfort, and organic clinic volume.",
                     pillar_id="partnership-vision",
                     provenance=Provenance(SOURCE_PDF, (4, 12, 13, 14, 26), "Point 19 generalized."),
                 ),
                 AdvantagePoint(
-                    number=19,
+                    number=16,
                     title="Multi-Specialty & Interprofessional Campus Synergy",
                     description="Substantial clinical capacity across two floors allows a single anchor health system or complementary co-tenants (primary care, dental, rehab, behavioral health, diagnostics) to cross-refer on site.",
                     pillar_id="partnership-vision",
                     provenance=Provenance(SOURCE_PDF, (26, 27), "Points 20-23 generalized."),
                 ),
                 AdvantagePoint(
-                    number=20,
+                    number=17,
                     title="Incentive & Grant Navigation Support",
                     description="Ownership provides hands-on financial and development expertise to help tenants navigate downtown revitalization programs, Main Street incentives, and rural healthcare infrastructure grants.",
                     pillar_id="partnership-vision",
                     provenance=Provenance(SOURCE_PDF, (28,), "Point 24 generalized."),
                 ),
                 AdvantagePoint(
-                    number=21,
+                    number=18,
                     title="Flexible Expansion Horizon & Custom Lease Frameworks",
                     description="Cooperative long-term institutional and private practice lease structures with expansion rights across two floors and adjacent parcels—supported by an ownership team rooted in finance, medicine, and engineering.",
                     pillar_id="partnership-vision",
@@ -825,8 +770,8 @@ def build_property_listing() -> PropertyListing:
         ),
         GalleryAsset(
             id="gal-exam-derm",
-            title="Specialty Procedure & Dermatology Suite",
-            caption="Procedure room configuration with surgical lighting, power exam chair, and laser/device cart.",
+            title="Specialty Procedure & Dermatology Suite (Renovation Concept)",
+            caption="Conceptual renovation rendering showing procedure room configuration with surgical lighting, power exam chair, and laser/device cart (not actual existing condition).",
             category="Clinical Interiors",
             image_path="assets/images/exam-room-procedure-derm.jpg",
             provenance=Provenance(SOURCE_PDF, (8,), "Page 8 Derm Exam Room."),
@@ -850,7 +795,7 @@ def build_property_listing() -> PropertyListing:
         GalleryAsset(
             id="gal-waiting-renovated",
             title="Hospitality-Inspired Patient Waiting Lounge",
-            caption="Warm biophilic waiting room concept with wood flooring and café-style seating.",
+            caption="Warm biophilic waiting room concept with wood flooring and comfortable seating.",
             category="Lobby & Waiting",
             image_path="assets/images/waiting-room-renovated.jpg",
             provenance=Provenance(SOURCE_PDF, (7,), "Page 7 Waiting Room Renovated."),
@@ -868,7 +813,7 @@ def build_property_listing() -> PropertyListing:
             title="Dedicated Pediatric / Specialty Sub-Waiting Room",
             caption="Secondary waiting lounge with built-in aquarium window for cohort separation.",
             category="Lobby & Waiting",
-            image_path="assets/images/practice-pediatric-waiting.jpg",
+            image_path="assets/images/practice-intake-business-office.jpg",
             provenance=Provenance(SOURCE_PDF, (13,), "Page 13 Pediatric Waiting Room."),
         ),
         GalleryAsset(
@@ -884,7 +829,7 @@ def build_property_listing() -> PropertyListing:
             title="Business & Intake Office Suite",
             caption="Multi-workstation administrative and patient billing office with pass-through window.",
             category="Executive & Education",
-            image_path="assets/images/practice-intake-business-office.jpg",
+            image_path="assets/images/practice-pediatric-waiting.jpg",
             provenance=Provenance(SOURCE_PDF, (13,), "Page 13 Intake/Business Office."),
         ),
         GalleryAsset(
@@ -911,14 +856,6 @@ def build_property_listing() -> PropertyListing:
             image_path="assets/images/survey-two-tracts.png",
             provenance=Provenance(SOURCE_PDF, (15,), "Page 15 2-Tract Survey."),
         ),
-        GalleryAsset(
-            id="gal-survey-easement",
-            title="Fayetteville Public Utilities Easement Survey",
-            caption="2024 survey for HH Health System-Lincoln Inc. to Fayetteville Public Utilities along Elk Ave S.",
-            category="Floorplans & Surveys",
-            image_path="assets/images/survey-utility-easement.png",
-            provenance=Provenance(SOURCE_PDF, (15,), "Page 15 Utility Easement Survey."),
-        ),
     )
 
     return PropertyListing(
@@ -935,7 +872,7 @@ def build_property_listing() -> PropertyListing:
         state="TN",
         postal_code="37334",
         county="Lincoln County",
-        occupancy_classification="IBC Group B (Business / Outpatient Medical & Clinical Training)",
+        occupancy_classification="Outpatient Medical & Executive Office",
         building_lot_acres=0.39,
         parking_lot_acres=0.45,
         total_campus_acres=0.84,

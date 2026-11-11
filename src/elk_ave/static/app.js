@@ -124,7 +124,6 @@
     const configEl = document.getElementById("arch-config");
     const roomsEl = document.getElementById("arch-rooms");
     const infraEl = document.getElementById("arch-infra-tags");
-    const loadCalcBtn = document.getElementById("arch-load-calc-btn");
 
     function renderArchetype(id) {
       const item = data.archetypes.find((a) => a.id === id);
@@ -159,19 +158,16 @@
       });
     });
 
-    if (loadCalcBtn) {
-      loadCalcBtn.addEventListener("click", () => {
+    const archInquireBtn = document.getElementById("arch-inquire-btn");
+    if (archInquireBtn) {
+      archInquireBtn.addEventListener("click", () => {
         const item = data.archetypes.find((a) => a.id === state.activeArchetypeId);
         if (!item) return;
-        const specSelect = document.getElementById("calc-specialty");
-        const roomsRange = document.getElementById("calc-rooms");
-        if (specSelect) specSelect.value = item.id;
-        if (roomsRange) {
-          roomsRange.value = String(item.target_rooms);
-          roomsRange.dispatchEvent(new Event("input"));
+        const specSelect = document.getElementById("inq-specialty");
+        if (specSelect) {
+          specSelect.value = item.id;
+          specSelect.dispatchEvent(new Event("change"));
         }
-        const calcSection = document.getElementById("calculator");
-        if (calcSection) calcSection.scrollIntoView({ behavior: "smooth" });
       });
     }
   }
@@ -361,185 +357,7 @@
   }
 
   /* --------------------------------------------------------------------------
-     6. Deterministic Clinical Footprint & TI Capital Calculator
-     -------------------------------------------------------------------------- */
-  function computeLocalEstimate(req) {
-    const rooms = Number(req.desired_clinical_rooms);
-    let floorPlan = "";
-    let allocatedRooms = 24;
-    let procRooms = 7;
-    let usableSqft = 10500;
-    let monthsSaved = 11;
-
-    if (
-      rooms <= 11 &&
-      (["behavioral-health", "rehab-physical-therapy", "academic-health-sciences"].includes(
-        req.specialty_id
-      ) ||
-        req.needs_conference_hall) &&
-      req.specialty_id !== "urgent-care-diagnostics"
-    ) {
-      floorPlan =
-        "Upper Level (2nd Floor — 11 Plumbed Rooms, Lab #235, 576 SF Hall & 16+ Offices)";
-      allocatedRooms = 11;
-      procRooms = 1;
-      usableSqft = 6800;
-      monthsSaved = 8;
-    } else if (rooms <= 14 && !req.needs_conference_hall) {
-      floorPlan =
-        "Ground Floor Phased Clinical Pod (12–16 Plumbed Exam & Procedure Suites)";
-      allocatedRooms = Math.max(rooms, 12);
-      procRooms = 4;
-      usableSqft = 5800;
-      monthsSaved = 9;
-    } else if (rooms <= 24 && !req.needs_conference_hall) {
-      floorPlan =
-        "Full Ground Floor Clinical Wing (24+ Exam Rooms, 7 Procedure Suites, X-Ray & Dual Waiting)";
-      allocatedRooms = 24;
-      procRooms = 7;
-      usableSqft = 10500;
-      monthsSaved = 11;
-    } else {
-      floorPlan =
-        "Full Two-Story Medical Campus (35+ Plumbed Rooms, 7 Procedure Suites, Labs & Executive Wing)";
-      allocatedRooms = 35;
-      procRooms = 8;
-      usableSqft = 17300;
-      monthsSaved = 14;
-    }
-
-    const coldShellPerSqft = [
-      "dental-oral-health",
-      "urgent-care-diagnostics",
-      "dermatology-aesthetics",
-    ].includes(req.specialty_id)
-      ? 240
-      : 215;
-
-    const tierMap = {
-      "turnkey-refresh": 28,
-      "modern-clinical": 52,
-      "bespoke-hospitality": 82,
-    };
-    const tiPerSqft = tierMap[req.finish_tier] || 52;
-
-    const coldShellCost = usableSqft * coldShellPerSqft;
-    const turnkeyCost = usableSqft * tiPerSqft;
-    const saved = Math.max(0, coldShellCost - turnkeyCost);
-
-    const advantages = [
-      `Avoids concrete slab trenching across ${allocatedRooms} wet-wall plumbed clinical rooms.`,
-      "Retains protected IBC Group B (Business) medical classification with zero structural fire-code retrofits.",
-    ];
-    if (req.needs_xray_or_lab) {
-      advantages.push(
-        "Includes existing X-Ray suite, Reading Room, Phlebotomy Blood Draw, and built-in Laboratory cabinetry."
-      );
-    }
-    if (req.needs_conference_hall || usableSqft !== 5800) {
-      advantages.push(
-        "Access to 576 SF clear-span Conference/Didactic Hall (#222) and 2nd-floor Executive Lounge."
-      );
-    }
-    advantages.push(
-      `Accommodates ${req.daily_patients} daily patient visits with dual waiting rooms and 0.5-acre dedicated parking.`
-    );
-
-    return {
-      recommended_floor_plan: floorPlan,
-      plumbed_rooms_allocated: allocatedRooms,
-      procedure_rooms_included: procRooms,
-      estimated_usable_sqft: usableSqft,
-      estimated_cold_shell_cost_usd: coldShellCost,
-      estimated_turnkey_ti_cost_usd: turnkeyCost,
-      estimated_capital_saved_usd: saved,
-      months_saved_vs_shell: monthsSaved,
-      parking_spaces_available: 75,
-      key_advantages: advantages,
-    };
-  }
-
-  function initCalculator() {
-    const specEl = document.getElementById("calc-specialty");
-    const roomsEl = document.getElementById("calc-rooms");
-    const patientsEl = document.getElementById("calc-patients");
-    const tierEl = document.getElementById("calc-tier");
-    const xrayEl = document.getElementById("calc-xray");
-    const confEl = document.getElementById("calc-conf");
-
-    const roomsValEl = document.getElementById("calc-rooms-val");
-    const patientsValEl = document.getElementById("calc-patients-val");
-    const savedEl = document.getElementById("res-capital-saved");
-    const recPlanEl = document.getElementById("res-floor-plan");
-    const kpiRoomsEl = document.getElementById("res-kpi-rooms");
-    const kpiMonthsEl = document.getElementById("res-kpi-months");
-    const kpiParkingEl = document.getElementById("res-kpi-parking");
-    const shellCostEl = document.getElementById("res-shell-cost");
-    const tiCostEl = document.getElementById("res-ti-cost");
-    const tiBarEl = document.getElementById("res-ti-bar");
-    const advListEl = document.getElementById("res-advantages-list");
-
-    if (!specEl || !roomsEl || !patientsEl || !tierEl) return;
-
-    function updateCalculator() {
-      const req = {
-        specialty_id: specEl.value,
-        desired_clinical_rooms: Number(roomsEl.value),
-        daily_patients: Number(patientsEl.value),
-        finish_tier: tierEl.value,
-        needs_xray_or_lab: xrayEl ? xrayEl.checked : true,
-        needs_conference_hall: confEl ? confEl.checked : false,
-      };
-
-      if (roomsValEl) roomsValEl.textContent = `${req.desired_clinical_rooms} Rooms`;
-      if (patientsValEl)
-        patientsValEl.textContent = `${req.daily_patients} Visits / Day`;
-
-      const res = computeLocalEstimate(req);
-      state.lastEstimate = { req, res };
-
-      if (savedEl) savedEl.textContent = formatUSD(res.estimated_capital_saved_usd);
-      if (recPlanEl) recPlanEl.textContent = res.recommended_floor_plan;
-      if (kpiRoomsEl)
-        kpiRoomsEl.textContent = `${res.plumbed_rooms_allocated} Plumbed + ${res.procedure_rooms_included} Proc`;
-      if (kpiMonthsEl)
-        kpiMonthsEl.textContent = `${res.months_saved_vs_shell} Months Faster`;
-      if (kpiParkingEl)
-        kpiParkingEl.textContent = `${res.parking_spaces_available}+ Spaces (0.5 AC Lot)`;
-      if (shellCostEl)
-        shellCostEl.textContent = formatUSD(res.estimated_cold_shell_cost_usd);
-      if (tiCostEl)
-        tiCostEl.textContent = formatUSD(res.estimated_turnkey_ti_cost_usd);
-
-      if (tiBarEl && res.estimated_cold_shell_cost_usd > 0) {
-        const pct = Math.round(
-          (res.estimated_turnkey_ti_cost_usd / res.estimated_cold_shell_cost_usd) *
-            100
-        );
-        tiBarEl.style.width = `${Math.max(10, Math.min(100, pct))}%`;
-      }
-
-      if (advListEl) {
-        advListEl.innerHTML = res.key_advantages
-          .map((a) => `<li>${a}</li>`)
-          .join("");
-      }
-
-      syncInquirySummary();
-    }
-
-    [specEl, roomsEl, patientsEl, tierEl, xrayEl, confEl].forEach((input) => {
-      if (input) {
-        input.addEventListener("input", updateCalculator);
-        input.addEventListener("change", updateCalculator);
-      }
-    });
-
-    updateCalculator();
-  }
-
-  /* --------------------------------------------------------------------------
-     7. Filterable Gallery & Lightbox
+     5. Filterable Gallery & Lightbox
      -------------------------------------------------------------------------- */
   function openStandaloneLightbox(src, title, caption) {
     const modal = document.getElementById("lightbox-modal");
@@ -644,16 +462,19 @@
      -------------------------------------------------------------------------- */
   function syncInquirySummary() {
     const previewEl = document.getElementById("inquiry-preview-box");
-    if (!previewEl || !state.lastEstimate) return;
+    if (!previewEl) return;
     const name =
       (document.getElementById("inq-name") || {}).value || "Prospective Medical Tenant";
     const org =
       (document.getElementById("inq-org") || {}).value || "Healthcare Practice / Group";
+    const specialty =
+      (document.getElementById("inq-specialty") || {}).value || "Outpatient Clinical / Healthcare Practice";
+    const footprint =
+      (document.getElementById("inq-footprint") || {}).value || "Full Ground Floor Clinical Wing (24+ Plumbed Rooms + 7 Proc Suites)";
     const timeline =
-      (document.getElementById("inq-timeline") || {}).value || "Q3/Q4 Target Launch";
+      (document.getElementById("inq-timeline") || {}).value || "Q1 / Q2 Next Year";
     const notes = (document.getElementById("inq-notes") || {}).value || "";
 
-    const { req, res } = state.lastEstimate;
     const lines = [
       `Subject: 207 Elk Ave S Medical Leasing Inquiry — ${org}`,
       "",
@@ -661,16 +482,13 @@
       "",
       `We are evaluating medical/clinical space at 207 Elk Ave S in Fayetteville, TN for ${org} (Contact: ${name}).`,
       "",
-      "Configuration Summary:",
-      `• Target Specialty Profile: ${req.specialty_id}`,
-      `• Desired Plumbed Clinical / Exam Rooms: ${req.desired_clinical_rooms} rooms`,
-      `• Recommended Footprint: ${res.recommended_floor_plan}`,
-      `• Estimated Daily Patient Volume: ~${req.daily_patients} visits/day`,
-      `• Estimated TI Capital Preserved vs. Cold Shell: ${formatUSD(res.estimated_capital_saved_usd)}`,
+      "Program & Footprint Summary:",
+      `• Clinical Specialty / Program: ${specialty}`,
+      `• Desired Footprint: ${footprint}`,
       `• Target Occupancy Horizon: ${timeline}`,
     ];
     if (notes.trim()) {
-      lines.push(`• Additional Requirements: ${notes.trim()}`);
+      lines.push(`• Additional Requirements / Clinical Notes: ${notes.trim()}`);
     }
     lines.push(
       "",
@@ -682,10 +500,13 @@
   }
 
   function initInquiryForm() {
-    const inputs = ["inq-name", "inq-org", "inq-timeline", "inq-notes"];
+    const inputs = ["inq-name", "inq-org", "inq-specialty", "inq-footprint", "inq-timeline", "inq-notes"];
     inputs.forEach((id) => {
       const el = document.getElementById(id);
-      if (el) el.addEventListener("input", syncInquirySummary);
+      if (el) {
+        el.addEventListener("input", syncInquirySummary);
+        el.addEventListener("change", syncInquirySummary);
+      }
     });
 
     const copyBtn = document.getElementById("inq-copy-btn");
@@ -727,7 +548,6 @@
     initArchetypeExplorer(data);
     initTransformationStudio(data);
     initFloorExplorer(data);
-    initCalculator();
     initGallery(data);
     initInquiryForm();
   });

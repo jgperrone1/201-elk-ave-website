@@ -64,6 +64,9 @@ class CatalogAndGeneralizationTests(unittest.TestCase):
         self.assertEqual(upper.restrooms, 4)
         self.assertTrue(upper.elevator_served)
 
+        # 3 Strategic Pillars
+        self.assertEqual(len(self.listing.pillars), 3)
+
     def test_content_is_generalized_beyond_single_tenant_pitch(self) -> None:
         """Ensure single-tenant target names from the reference PDF are generalized out."""
         html_output = render_index_html(self.listing)
@@ -74,6 +77,40 @@ class CatalogAndGeneralizationTests(unittest.TestCase):
                 html_output,
                 f"Found ungeneralized single-tenant token '{token}' in rendered HTML.",
             )
+
+    def test_disclosures_scrubbed_code_and_gallery_requirements(self) -> None:
+        """Verify disclosures tab/section, scrubbed code references, and gallery updates."""
+        html_output = render_index_html(self.listing)
+
+        # Disclosures verification
+        self.assertIn('id="disclosures"', html_output)
+        self.assertIn("nav-disclosure-link", html_output)
+        self.assertIn("Real Estate Licensing &amp; Ownership Disclosure", html_output)
+        self.assertIn("Renderings &amp; Information Disclaimer", html_output)
+        self.assertIn("62-13-104", html_output)
+        self.assertIn("RealtyMark Solutions, LLC", html_output)
+        self.assertIn("Shazia (Shaz) Perrone", html_output)
+
+        # Scrubbed tokens verification
+        scrubbed_phrases = (
+            "Code, Permitting & Capital Efficiency",
+            "CODE & CAPITAL",
+            "Group B",
+            "Protected IBC Medical Occupancy",
+            "IBC Group B Medical & Executive Office · 0.84 Total Acres (Building + Dedicated Parking)",
+            "TI Capital Preservation Estimator",
+            "Fayetteville Public Utilities Easement Survey",
+        )
+        for phrase in scrubbed_phrases:
+            self.assertNotIn(
+                phrase,
+                html_output,
+                f"Found forbidden scrubbed phrase '{phrase}' in rendered HTML.",
+            )
+
+        # Gallery verification
+        self.assertIn("Specialty Procedure &amp; Dermatology Suite (Renovation Concept)", html_output)
+        self.assertIn("not actual existing condition", html_output)
 
     def test_provenance_preserved_across_all_entities(self) -> None:
         for metric in self.listing.metrics:
@@ -183,6 +220,10 @@ class RendererAndServerTests(unittest.TestCase):
 
     def test_cli_check_and_build_commands(self) -> None:
         self.assertEqual(cli_main.main(["check"]), 0)
+        self.assertEqual(
+            cli_main.main(["estimate", "--rooms", "12", "--specialty", "dental-oral-health"]),
+            0,
+        )
         with tempfile.TemporaryDirectory() as tmp:
             out_dir = Path(tmp) / "site"
             self.assertEqual(cli_main.main(["build", "--output", str(out_dir)]), 0)

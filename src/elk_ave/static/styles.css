@@ -349,6 +349,31 @@ textarea {
   box-shadow: var(--shadow-sm);
 }
 
+.nav-links a.nav-disclosure-link {
+  color: var(--accent-primary);
+  font-weight: 700;
+  border: 1px solid var(--accent-teal-soft);
+  background: var(--accent-teal-soft);
+}
+
+.nav-links a.nav-disclosure-link:hover,
+.nav-links a.nav-disclosure-link.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .nav-links a.nav-disclosure-link {
+  color: #5eead4;
+  border-color: rgba(94, 234, 212, 0.25);
+  background: rgba(94, 234, 212, 0.12);
+}
+
+[data-theme="dark"] .nav-links a.nav-disclosure-link:hover,
+[data-theme="dark"] .nav-links a.nav-disclosure-link.active {
+  background: #5eead4;
+  color: #091315;
+}
+
 .header-actions {
   display: inline-flex;
   align-items: center;
@@ -1637,6 +1662,78 @@ textarea {
   color: #ffffff;
 }
 
+/* Disclosures & Regulatory Notices */
+.disclosure-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+}
+
+.disclosure-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid var(--accent-primary);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.disclosure-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.disclosure-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--accent-primary);
+  background: var(--accent-teal-soft);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 0.85rem;
+}
+
+[data-theme="dark"] .disclosure-badge {
+  color: #5eead4;
+  background: rgba(94, 234, 212, 0.12);
+}
+
+.disclosure-title {
+  font-family: var(--font-serif);
+  font-size: 1.55rem;
+  line-height: 1.25;
+  margin-bottom: 1.15rem;
+  color: var(--text-primary);
+}
+
+.disclosure-body p {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.disclosure-body p:last-child {
+  margin-bottom: 0;
+}
+
+.footer-disclosure-link {
+  color: var(--text-on-dark-muted);
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.footer-disclosure-link:hover {
+  color: #5eead4;
+}
+
 /* Footer */
 .site-footer {
   width: 100%;
@@ -1667,6 +1764,7 @@ textarea {
   .floor-explorer-grid,
   .calculator-shell,
   .campus-location-grid,
+  .disclosure-grid,
   .contact-grid {
     grid-template-columns: 1fr;
   }

@@ -155,7 +155,7 @@ def calculate_clinical_fit(request: SpaceEstimateRequest) -> SpaceEstimateResult
 
     advantages = [
         f"Avoids concrete slab trenching across {allocated_rooms} wet-wall plumbed clinical rooms.",
-        "Retains protected IBC Group B (Business) medical classification with zero structural fire-code retrofits.",
+        "Turnkey clinical infrastructure with complete wet-wall plumbing, eliminating extensive structural retrofits.",
     ]
     if request.needs_xray_or_lab:
         advantages.append(
@@ -180,7 +180,7 @@ def calculate_clinical_fit(request: SpaceEstimateRequest) -> SpaceEstimateResult
         estimated_capital_saved_usd=capital_saved,
         months_saved_vs_shell=months_saved,
         parking_spaces_available=parking_spaces,
-        ibc_occupancy_note="Strict IBC Group B (Outpatient Medical / Clinical Training) — no Group E/I-1 retrofit triggers.",
+        ibc_occupancy_note="Outpatient medical and healthcare clinical facility.",
         key_advantages=tuple(advantages),
     )
 
